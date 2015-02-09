@@ -11,7 +11,10 @@
     }
   },
   "require": {
-    "rhubarbphp/rhubarb": "dev-crown"
+    "rhubarbphp/rhubarb": "dev-crown",
+    "rhubarbphp/module-stem": "dev-migration",
+    "rhubarbphp/module-leaf": "dev-feature/MigrationFromCore",
+    "rhubarbphp/module-restapi": "dev-feature/MigrationFromCore"
   },
   "require-dev": {
     "phpunit/phpunit": "3.*"
