@@ -1,13 +1,13 @@
 <?php
 
-namespace Rhubarb\Crown\Scaffolds\Saas\Model\Accounts;
+namespace Rhubarb\Scaffolds\Saas\Model\Accounts;
 
-use Rhubarb\Crown\Modelling\Models\Model;
-use Rhubarb\Crown\Modelling\Repositories\MySql\Schema\Columns\AutoIncrement;
-use Rhubarb\Crown\Modelling\Repositories\MySql\Schema\Columns\DateTime;
-use Rhubarb\Crown\Modelling\Repositories\MySql\Schema\Columns\ForeignKey;
-use Rhubarb\Crown\Modelling\Repositories\MySql\Schema\Columns\Varchar;
-use Rhubarb\Crown\Modelling\Repositories\MySql\Schema\MySqlSchema;
+use Rhubarb\Stem\Models\Model;
+use Rhubarb\Stem\Repositories\MySql\Schema\Columns\AutoIncrement;
+use Rhubarb\Stem\Repositories\MySql\Schema\Columns\DateTime;
+use Rhubarb\Stem\Repositories\MySql\Schema\Columns\ForeignKey;
+use Rhubarb\Stem\Repositories\MySql\Schema\Columns\Varchar;
+use Rhubarb\Stem\Repositories\MySql\Schema\MySqlSchema;
 
 class AccountInvite extends Model
 {

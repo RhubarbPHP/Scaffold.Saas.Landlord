@@ -1,25 +1,40 @@
 <?php
 
-namespace Rhubarb\Crown\Scaffolds\Saas\Model\Accounts;
+/*
+ *	Copyright 2015 RhubarbPHP
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
-use Rhubarb\Crown\Modelling\Models\Model;
-use Rhubarb\Crown\Modelling\Repositories\MySql\Schema\Columns\AutoIncrement;
-use Rhubarb\Crown\Modelling\Repositories\MySql\Schema\Columns\ForeignKey;
-use Rhubarb\Crown\Modelling\Repositories\MySql\Schema\Columns\Varchar;
-use Rhubarb\Crown\Modelling\Repositories\MySql\Schema\MySqlSchema;
+namespace Rhubarb\Scaffolds\Saas\Model\Accounts;
+
+use Rhubarb\Stem\Models\Model;
+use Rhubarb\Stem\Repositories\MySql\Schema\Columns\AutoIncrement;
+use Rhubarb\Stem\Repositories\MySql\Schema\Columns\ForeignKey;
+use Rhubarb\Stem\Repositories\MySql\Schema\MySqlSchema;
 
 class AccountUser extends Model
 {
-	public function CreateSchema()
-	{
-		$schema = new MySqlSchema( "tblAccountUser" );
+    public function createSchema()
+    {
+        $schema = new MySqlSchema("tblAccountUser");
 
-		$schema->AddColumn(
-			new AutoIncrement( "AccountUserID" ),
-			new ForeignKey( "AccountID" ),
-			new ForeignKey( "UserID" )
-		);
+        $schema->addColumn(
+            new AutoIncrement("AccountUserID"),
+            new ForeignKey("AccountID"),
+            new ForeignKey("UserID")
+        );
 
-		return $schema;
-	}
+        return $schema;
+    }
 }

@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Crown\Scaffolds\Saas\LoginProviders;
+namespace Rhubarb\Scaffolds\Saas\LoginProviders;
 
 use Rhubarb\Scaffolds\Authentication\LoginProvider;
 

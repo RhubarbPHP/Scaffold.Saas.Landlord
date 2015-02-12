@@ -1,8 +1,8 @@
 <?php
 
-namespace Rhubarb\Crown\Scaffolds\Saas\RestResources\Users;
+namespace Rhubarb\Scaffolds\Saas\RestResources\Users;
 
-use Rhubarb\Crown\Scaffolds\Saas\LoginProviders\SaasLoginProvider;
+use Rhubarb\Scaffolds\Saas\LoginProviders\SaasLoginProvider;
 
 class MeResource extends UserResource
 {

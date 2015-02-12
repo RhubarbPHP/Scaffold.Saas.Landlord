@@ -1,12 +1,12 @@
 <?php
 
-namespace Rhubarb\Crown\Scaffolds\Saas\RestResources\Users;
+namespace Rhubarb\Scaffolds\Saas\RestResources\Users;
 
 use Rhubarb\Crown\Logging\Log;
-use Rhubarb\Crown\Modelling\Collections\Collection;
-use Rhubarb\Crown\Modelling\Exceptions\RecordNotFoundException;
-use Rhubarb\Crown\Modelling\Models\Model;
-use Rhubarb\Crown\Modelling\Schema\SolutionSchema;
+use Rhubarb\Stem\Collections\Collection;
+use Rhubarb\Stem\Exceptions\RecordNotFoundException;
+use Rhubarb\Stem\Models\Model;
+use Rhubarb\Stem\Schema\SolutionSchema;
 use Rhubarb\Crown\RestApi\Exceptions\UpdateException;
 use Rhubarb\Crown\RestApi\Resources\ModelRestResource;
 use Rhubarb\Crown\RestApi\UrlHandlers\RestHandler;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Rhubarb\Crown\Scaffolds\Saas;
+namespace Rhubarb\Scaffolds\Saas;
 
 use Rhubarb\Crown\Encryption\EncryptionProvider;
-use Rhubarb\Crown\Modelling\Schema\SolutionSchema;
+use Rhubarb\Stem\Schema\SolutionSchema;
 use Rhubarb\Crown\Module;
 use Rhubarb\Crown\RestApi\Resources\RestResource;
 use Rhubarb\Crown\RestApi\RestApiModule;
@@ -11,8 +11,8 @@ use Rhubarb\Crown\RestApi\UrlHandlers\PostOnlyRestCollectionHandler;
 use Rhubarb\Crown\RestApi\UrlHandlers\RestCollectionHandler;
 use Rhubarb\Crown\RestApi\UrlHandlers\RestResourceHandler;
 use Rhubarb\Crown\RestApi\UrlHandlers\UnauthenticatedRestCollectionHandler;
-use Rhubarb\Crown\Scaffolds\AuthenticationWithRoles\AuthenticationWithRolesModule;
-use Rhubarb\Crown\Scaffolds\TokenBasedRestApi\TokenBasedRestApiModule;
+use Rhubarb\Scaffolds\AuthenticationWithRoles\AuthenticationWithRolesModule;
+use Rhubarb\Scaffolds\TokenBasedRestApi\TokenBasedRestApiModule;
 
 class SaasModule extends Module
 {
@@ -37,11 +37,11 @@ class SaasModule extends Module
     {
 		parent::RegisterDependantModules();
 
-		Module::RegisterModule( new AuthenticationWithRolesModule( '\Rhubarb\Crown\Scaffolds\Saas\LoginProviders\SaasLoginProvider' ) );
+		Module::RegisterModule( new AuthenticationWithRolesModule( '\Rhubarb\Scaffolds\Saas\LoginProviders\SaasLoginProvider' ) );
 
 		Module::RegisterModule( new TokenBasedRestApiModule(
-			'\Rhubarb\Crown\Scaffolds\Saas\RestAuthenticationProviders\CredentialsAuthenticationProvider',
-			'\Rhubarb\Crown\Scaffolds\Saas\RestAuthenticationProviders\TokenBasedAuthenticationProvider'
+			'\Rhubarb\Scaffolds\Saas\RestAuthenticationProviders\CredentialsAuthenticationProvider',
+			'\Rhubarb\Scaffolds\Saas\RestAuthenticationProviders\TokenBasedAuthenticationProvider'
 			));
 		Module::RegisterModule( new RestApiModule() );
     }
@@ -71,6 +71,6 @@ class SaasModule extends Module
 
 		$this->AddUrlHandlers( $urlHandlers );
 
-		EncryptionProvider::SetEncryptionProviderClassName( '\Rhubarb\Crown\Scaffolds\Saas\EncryptionProviders\SaasAes256EncryptionProvider' );
+		EncryptionProvider::SetEncryptionProviderClassName( '\Rhubarb\Scaffolds\Saas\EncryptionProviders\SaasAes256EncryptionProvider' );
 	}
 }

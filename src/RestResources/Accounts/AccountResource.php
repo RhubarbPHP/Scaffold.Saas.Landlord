@@ -1,10 +1,10 @@
 <?php
 
-namespace Rhubarb\Crown\Scaffolds\Saas\RestResources\Accounts;
+namespace Rhubarb\Scaffolds\Saas\RestResources\Accounts;
 
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\RestApi\Resources\ModelRestResource;
-use Rhubarb\Crown\Scaffolds\Saas\LoginProviders\SaasLoginProvider;
+use Rhubarb\Scaffolds\Saas\LoginProviders\SaasLoginProvider;
 
 class AccountResource extends ModelRestResource
 {

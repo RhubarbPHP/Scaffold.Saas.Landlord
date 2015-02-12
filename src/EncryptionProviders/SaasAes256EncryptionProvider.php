@@ -16,20 +16,20 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Crown\Scaffolds\Saas\EncryptionProviders;
+namespace Rhubarb\Scaffolds\Saas\EncryptionProviders;
 
 use Rhubarb\Crown\Encryption\Aes256EncryptionProvider;
 
 class SaasAes256EncryptionProvider extends Aes256EncryptionProvider
 {
-	/**
-	 * Implement this function to return a key for encryption and decryption
-	 *
-	 * @param string $keySalt An optional string used to derive the key. Not all use cases will supply this.
-	 * @return string
-	 */
-	protected function getEncryptionKey($keySalt = "")
-	{
-		return "<3C927#6".$keySalt."6n|o44}V0yo|4PWaF5'}s~";
-	}
+    /**
+     * Implement this function to return a key for encryption and decryption
+     *
+     * @param string $keySalt An optional string used to derive the key. Not all use cases will supply this.
+     * @return string
+     */
+    protected function getEncryptionKey($keySalt = "")
+    {
+        return "<3C927#6" . $keySalt . "6n|o44}V0yo|4PWaF5'}s~";
+    }
 }
