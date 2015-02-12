@@ -1,80 +1,95 @@
 <?php
 
-namespace Gcd\Core\Scaffolds\Saas\UnitTesting;
+/*
+ *	Copyright 2015 RhubarbPHP
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
-use Gcd\Core\Context;
-use Gcd\Core\CoreModule;
-use Gcd\Core\Encryption\HashProvider;
-use Gcd\Core\Integration\Http\HttpClient;
-use Gcd\Core\Modelling\Models\Model;
-use Gcd\Core\Modelling\Repositories\Repository;
-use Gcd\Core\Modelling\Schema\SolutionSchema;
-use Gcd\Core\Module;
-use Gcd\Core\Scaffolds\AuthenticationWithRoles\User;
-use Gcd\Core\Scaffolds\Saas\Model\Accounts\Account;
-use Gcd\Core\Scaffolds\Saas\SaasModule;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures;
+
+use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Encryption\HashProvider;
+use Rhubarb\Crown\Http\HttpClient;
+use Rhubarb\Crown\Layout\LayoutModule;
+use Rhubarb\Crown\Module;
+use Rhubarb\Scaffolds\AuthenticationWithRoles\User;
+use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\Account;
+use Rhubarb\Scaffolds\Saas\Landlord\SaasLandlordModule;
+use Rhubarb\Stem\Models\Model;
+use Rhubarb\Stem\Repositories\Repository;
+use Rhubarb\Stem\Schema\SolutionSchema;
 
 trait SaasTestCaseTrait
 {
-	/**
-	 * @var Account
-	 */
-	protected $_steelInc;
+    /**
+     * @var Account
+     */
+    protected $steelInc;
 
-	public static function setUpBeforeClass()
-	{
-		Repository::SetDefaultRepositoryClassName( "\Gcd\Core\Modelling\Repositories\Offline\Offline" );
+    public static function setUpBeforeClass()
+    {
+        Repository::setDefaultRepositoryClassName("\Rhubarb\Stem\Repositories\Offline\Offline");
 
-		SolutionSchema::ClearSchemas();
+        SolutionSchema::clearSchemas();
 
-		Module::ClearModules();
-		Module::RegisterModule( new CoreModule() );
-		Module::RegisterModule( new SaasModule() );
-		Module::InitialiseModules();
+        Module::clearModules();
+        Module::registerModule(new SaasLandlordModule());
+        Module::initialiseModules();
 
-		\Gcd\Core\Layout\LayoutModule::DisableLayout();
+        LayoutModule::disableLayout();
 
-		$context = new \Gcd\Core\Context();
-		$context->UnitTesting = true;
+        $context = new Context();
+        $context->UnitTesting = true;
 
-		$request = Context::CurrentRequest();
-		$request->Reset();
+        $request = Context::currentRequest();
+        $request->reset();
 
-		HashProvider::SetHashProviderClassName( "\Gcd\Core\Encryption\Sha512HashProvider" );
+        HashProvider::setHashProviderClassName("\Rhubarb\Crown\Encryption\Sha512HashProvider");
 
-		// Make sure HTTP requests go the unit testing route.
-		HttpClient::SetDefaultHttpClientClassName( '\Gcd\Core\Integration\Http\UnitTestingHttpClient' );
-	}
+        // Make sure HTTP requests go the unit testing route.
+        HttpClient::setDefaultHttpClientClassName('\Rhubarb\Crown\Tests\Fixtures\UnitTestingHttpClient');
+    }
 
-	protected function setUp()
-	{
-		Model::DeleteRepositories();
+    protected function setUp()
+    {
+        Model::deleteRepositories();
 
-		parent::setUp();
+        parent::setUp();
 
-		$user = new User();
-		$user->Username = "unit-tester";
-		$user->Password = '$6$rounds=10000$saltyfish$xsdN77OODY/XmxLdlkFW9CNxuE4H6NjEGG7K7tGJbzHUyDrVDHROL/FqG.ANet3dcd6WqGOOvaDjLv/WeAtcK0';
-		$user->Forename = "Unit Tester";
-		$user->Enabled = 1;
-		$user->Save();
+        $user = new User();
+        $user->Username = "unit-tester";
+        $user->Password = '$6$rounds=10000$saltyfish$xsdN77OODY/XmxLdlkFW9CNxuE4H6NjEGG7K7tGJbzHUyDrVDHROL/FqG.ANet3dcd6WqGOOvaDjLv/WeAtcK0';
+        $user->Forename = "Unit Tester";
+        $user->Enabled = 1;
+        $user->save();
 
-		$account = new Account();
-		$account->AccountName = "Widgets Co";
-		$account->Save();
+        $account = new Account();
+        $account->AccountName = "Widgets Co";
+        $account->save();
 
-		$account->Users->Append( $user );
+        $account->Users->append($user);
 
-		$account = new Account();
-		$account->AccountName = "Steel Inc.";
-		$account->Save();
+        $account = new Account();
+        $account->AccountName = "Steel Inc.";
+        $account->save();
 
-		$this->_steelInc = $account;
+        $this->steelInc = $account;
 
-		$account->Users->Append( $user );
+        $account->Users->append($user);
 
-		$unAttachedAccount = new Account();
-		$unAttachedAccount->AccountName = "Plastic Molders Ltd.";
-		$unAttachedAccount->Save();
-	}
+        $unAttachedAccount = new Account();
+        $unAttachedAccount->AccountName = "Plastic Molders Ltd.";
+        $unAttachedAccount->save();
+    }
 } 

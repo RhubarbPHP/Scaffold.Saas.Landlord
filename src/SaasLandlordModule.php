@@ -29,7 +29,7 @@ use Rhubarb\Scaffolds\AuthenticationWithRoles\AuthenticationWithRolesModule;
 use Rhubarb\Scaffolds\TokenBasedRestApi\TokenBasedRestApiModule;
 use Rhubarb\Stem\Schema\SolutionSchema;
 
-class SaasModule extends Module
+class SaasLandlordModule extends Module
 {
     private $apiStubUrl;
 

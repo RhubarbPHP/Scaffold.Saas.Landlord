@@ -1,20 +1,36 @@
 <?php
 
-namespace Gcd\Core\Scaffolds\Saas\RestResources\Users;
+/*
+ *	Copyright 2015 RhubarbPHP
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
-use Gcd\Core\Modelling\Filters\Equals;
-use Gcd\Core\Scaffolds\AuthenticationWithRoles\User;
-use Gcd\Core\Scaffolds\Saas\UnitTesting\SaasApiTestCase;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Tests\RestResources\Users;
+
+use Rhubarb\Stem\Filters\Equals;
+use Rhubarb\Scaffolds\AuthenticationWithRoles\User;
+use Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures\SaasApiTestCase;
 
 class UserRegistrationResourceTest extends SaasApiTestCase
 {
-	public function GetUsername()
+	public function getUsername()
 	{
 		// Forcibly disable authentication
 		return "";
 	}
 
-	public function GetPassword()
+	public function getPassword()
 	{
 		// Forcibly disable authentication
 		return "";
@@ -28,20 +44,20 @@ class UserRegistrationResourceTest extends SaasApiTestCase
 	public function testPublicCanRegister()
 	{
 		// Test you must supply key details
-		$result = $this->MakeApiCall( "/users", "post", [
+		$result = $this->makeApiCall( "/users", "post", [
 			"Username" => ""
 		]);
 
 		$this->assertFalse( $result->result->status );
 
-		$result = $this->MakeApiCall( "/users", "post", [
+		$result = $this->makeApiCall( "/users", "post", [
 			"Username" => "abc123",
 			"Forename" => ""
 		]);
 
 		$this->assertFalse( $result->result->status );
 
-		$result = $this->MakeApiCall( "/users", "post", [
+		$result = $this->makeApiCall( "/users", "post", [
 			"Username" => "abc123",
 			"Forename" => "test",
 			"NewPassword" => "abc",
@@ -49,7 +65,7 @@ class UserRegistrationResourceTest extends SaasApiTestCase
 
 		$this->assertEquals( "test", $result->Forename );
 
-		$result = $this->MakeApiCall( "/users", "post", [
+		$result = $this->makeApiCall( "/users", "post", [
 			"Username" => "nancy",
 			"NewPassword" => "bell",
 			"Email" => "jbloggs@hotmail.com",
@@ -61,12 +77,12 @@ class UserRegistrationResourceTest extends SaasApiTestCase
 
 		// Test you can't update users through this call.
 
-		$result = $this->MakeApiCall( "/users/".$result->_id, "put", $result );
+		$result = $this->makeApiCall( "/users/".$result->_id, "put", $result );
 
 		$this->assertFalse( $result->result->status );
 
 		// Test you can't create a duplicate on username.
-		$result = $this->MakeApiCall( "/users", "post", [
+		$result = $this->makeApiCall( "/users", "post", [
 			"Username" => "nancy",
 			"NewPassword" => "bell",
 			"Email" => "jbloggs@hotmail.com",
