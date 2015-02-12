@@ -16,17 +16,17 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\RestAuthenticationProviders;
+namespace Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders;
 
-use Rhubarb\Stem\Models\Model;
-use Rhubarb\Scaffolds\Saas\LoginProviders\SaasLoginProvider;
+use Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider;
 use Rhubarb\Scaffolds\TokenBasedRestApi;
+use Rhubarb\Stem\Models\Model;
 
 class TokenBasedAuthenticationProvider extends TokenBasedRestApi\Authentication\TokenAuthenticationProvider
 {
-	protected function LogUserIn(Model $user)
-	{
-		$loginProvider = new SaasLoginProvider();
-		$loginProvider->ForceLogin( $user );
-	}
+    protected function logUserIn(Model $user)
+    {
+        $loginProvider = new SaasLoginProvider();
+        $loginProvider->forceLogin($user);
+    }
 }

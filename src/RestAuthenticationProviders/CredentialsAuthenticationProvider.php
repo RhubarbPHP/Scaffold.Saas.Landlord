@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\RestAuthenticationProviders;
+namespace Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders;
 
 use Rhubarb\RestApi\Authentication\ModelLoginProviderAuthenticationProvider;
 
@@ -24,6 +24,6 @@ class CredentialsAuthenticationProvider extends ModelLoginProviderAuthentication
 {
 	protected function getLoginProviderClassName()
 	{
-		return "\Rhubarb\Scaffolds\Saas\LoginProviders\SaasLoginProvider";
+		return "\Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider";
 	}
 }

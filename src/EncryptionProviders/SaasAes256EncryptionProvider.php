@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\EncryptionProviders;
+namespace Rhubarb\Scaffolds\Saas\Landlord\EncryptionProviders;
 
 use Rhubarb\Crown\Encryption\Aes256EncryptionProvider;
 

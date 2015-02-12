@@ -1,41 +1,50 @@
 <?php
 
-namespace Rhubarb\Scaffolds\Saas\RestResources\Users;
+/*
+ *	Copyright 2015 RhubarbPHP
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
+namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users;
 
 use Rhubarb\Crown\Logging\Log;
-use Rhubarb\Stem\Collections\Collection;
-use Rhubarb\Stem\Exceptions\RecordNotFoundException;
-use Rhubarb\Stem\Models\Model;
-use Rhubarb\Stem\Schema\SolutionSchema;
-use Rhubarb\Crown\RestApi\Exceptions\UpdateException;
-use Rhubarb\Crown\RestApi\Resources\ModelRestResource;
-use Rhubarb\Crown\RestApi\UrlHandlers\RestHandler;
-use string;
+use Rhubarb\RestApi\Resources\ModelRestResource;
 
 class UserResource extends ModelRestResource
 {
-	/**
-	 * Returns the name of the model to use for this resource.
-	 *
-	 * @return string
-	 */
-	public function GetModelName()
-	{
-		return "User";
-	}
+    /**
+     * Returns the name of the model to use for this resource.
+     *
+     * @return string
+     */
+    public function getModelName()
+    {
+        return "User";
+    }
 
-	protected function GetColumns()
-	{
-		return [ "Username", "Forename", "Surname", "Email", "Enabled" ];
-	}
+    protected function getColumns()
+    {
+        return ["Username", "Forename", "Surname", "Email", "Enabled"];
+    }
 
-	protected function BeforeModelUpdated($model, $restResource)
-	{
-		if ( isset( $restResource[ "NewPassword" ] ) )
-		{
-			Log::Debug( "User `".$model->RealName."` (`".$model->UniqueIdentifier."`) password changed.", "SaaS" );
+    protected function beforeModelUpdated($model, $restResource)
+    {
+        if (isset($restResource["NewPassword"])) {
+            Log::Debug("User `" . $model->RealName . "` (`" . $model->UniqueIdentifier . "`) password changed.",
+                "SaaS");
 
-			$model->SetNewPassword( $restResource[ "NewPassword" ] );
-		}
-	}
+            $model->setNewPassword($restResource["NewPassword"]);
+        }
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rhubarb\Scaffolds\Saas\Model;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Model;
 
 use Rhubarb\Stem\Schema\SolutionSchema;
 

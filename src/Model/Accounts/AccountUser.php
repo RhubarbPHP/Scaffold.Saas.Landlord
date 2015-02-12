@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Model\Accounts;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts;
 
 use Rhubarb\Stem\Models\Model;
 use Rhubarb\Stem\Repositories\MySql\Schema\Columns\AutoIncrement;
