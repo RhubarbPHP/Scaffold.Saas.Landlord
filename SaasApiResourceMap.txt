@@ -1,0 +1,18 @@
+/api/tokens                                     POST to authenticate and get a token
+/api/tokens/{TokenID}                           HEAD/GET to validate a token. Invalid tokens will present a 403
+
+/api/users                                      POST to create a new account
+/api/users/me                                   GET to retrieve user details
+                                                PUT to update user details (including password)
+
+/api/users/me/accounts                          GET to retrieve list of user accounts
+/api/users/me/invites                           GET to retrieve list of invites to other accounts
+/api/users/me/invites/{InviteID}                GET/PUT retrieve or update invites
+
+/api/accounts                                   POST to register a new account
+/api/accounts/{AccountID}                       GET to retrieve account details
+/api/accounts/{AccountID}/invites               GET to retrieve a list of outstanding invites
+                                                POST to create a new invite
+/api/accounts/{AccountID}/invites/{InviteID}    GET/PUT to retrieve and update (cancel only) invite
+/api/accounts/{AccountID}/server-credentials    GET to retrieve credentials required for database selection (only available to known hosts)
+
