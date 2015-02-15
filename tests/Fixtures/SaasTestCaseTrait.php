@@ -37,6 +37,11 @@ trait SaasTestCaseTrait
      */
     protected $steelInc;
 
+    /**
+     * @var User
+     */
+    protected $nigel;
+
     public static function setUpBeforeClass()
     {
         Repository::setDefaultRepositoryClassName("\Rhubarb\Stem\Repositories\Offline\Offline");
@@ -71,11 +76,13 @@ trait SaasTestCaseTrait
         $user->Username = "unit-tester";
         $user->Password = '$6$rounds=10000$saltyfish$xsdN77OODY/XmxLdlkFW9CNxuE4H6NjEGG7K7tGJbzHUyDrVDHROL/FqG.ANet3dcd6WqGOOvaDjLv/WeAtcK0';
         $user->Forename = "Unit Tester";
+        $user->Email = "ut@ut.com";
         $user->Enabled = 1;
         $user->save();
 
         $account = new Account();
         $account->AccountName = "Widgets Co";
+        $account->CredentialsIV = "";
         $account->save();
 
         $account->Users->append($user);
@@ -91,5 +98,18 @@ trait SaasTestCaseTrait
         $unAttachedAccount = new Account();
         $unAttachedAccount->AccountName = "Plastic Molders Ltd.";
         $unAttachedAccount->save();
+
+        $this->nigel = new User();
+        $this->nigel->Username = "nigel";
+        $this->nigel->Password = '$6$rounds=10000$saltyfish$xsdN77OODY/XmxLdlkFW9CNxuE4H6NjEGG7K7tGJbzHUyDrVDHROL/FqG.ANet3dcd6WqGOOvaDjLv/WeAtcK0';
+        $this->nigel->Forename = "Nigel";
+        $this->nigel->Enabled = 1;
+        $this->nigel->save();
+
+        $account = new Account();
+        $account->AccountName = "Fundraises Inc.";
+        $account->save();
+
+        $account->Users->append( $this->nigel );
     }
 } 

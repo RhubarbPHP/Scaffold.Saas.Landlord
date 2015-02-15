@@ -44,4 +44,15 @@ class AccountResource extends ModelRestResource
 
         $user->Accounts->append($model);
     }
+
+    protected function getColumns()
+    {
+        return
+        [
+            "AccountName",
+            "UniqueReference",
+            "CredentialsIV",
+            "Server"
+        ];
+    }
 }
