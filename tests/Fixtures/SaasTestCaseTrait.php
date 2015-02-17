@@ -45,6 +45,11 @@ trait SaasTestCaseTrait
 
 	protected $landlordUser;
 
+	/**
+	 * @var Account
+	 */
+	protected $protonWelding;
+
 	public static function setUpBeforeClass()
 	{
 		Repository::setDefaultRepositoryClassName( "\Rhubarb\Stem\Repositories\Offline\Offline" );
@@ -124,6 +129,8 @@ trait SaasTestCaseTrait
 		$account = new Account();
 		$account->AccountName = "Proton Welding";
 		$account->save();
+
+		$this->protonWelding = $account;
 
 		$account->Users->append( $user );
 
