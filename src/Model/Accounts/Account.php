@@ -60,6 +60,14 @@ class Account extends Model
             $baseReference = preg_replace("/-+/", "-", $baseReference);
             $baseReference = trim($baseReference, '-');
 
+            // Shorten the base reference. We use the reference to create MySQL databases and usernames. However
+            // this can't be any longer than 16 characters. We truncate this now to 10 characters to allow for
+            // 5 digits worth of duplication. If we have more than that then we're in a good place!
+            if ( strlen( $baseReference ) > 10 )
+            {
+                $baseReference = substr( $baseReference, 0, 10 );
+            }
+
             $reference = $baseReference;
 
             $dupeCount = 1;
