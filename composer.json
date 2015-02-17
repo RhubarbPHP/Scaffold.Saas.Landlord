@@ -16,6 +16,7 @@
     "rhubarbphp/module-stem": "dev-migration",
     "rhubarbphp/module-leaf": "dev-feature/MigrationFromCore",
     "rhubarbphp/module-restapi": "dev-feature/MigrationFromCore",
+    "rhubarbphp/module-patterns": "dev-feature/MigrationFromCore",
     "rhubarbphp/scaffold-token-based-restapi": "dev-feature/MigrationFromCore",
     "rhubarbphp/scaffold-navigation-menu": "dev-feature/MigrationFromCore"
   },
