@@ -16,9 +16,14 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Accounts;
 
-class SaasTestCase extends \PHPUnit_Framework_TestCase
+use Rhubarb\Leaf\Presenters\Forms\MvpRestBoundForm;
+
+class AccountsCollectionPresenter extends MvpRestBoundForm
 {
-	use SaasTestCaseTrait;
-} 
+    protected function createView()
+    {
+        return new AccountsCollectionView();
+    }
+}

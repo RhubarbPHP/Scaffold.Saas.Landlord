@@ -16,9 +16,28 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Accounts;
 
-class SaasTestCase extends \PHPUnit_Framework_TestCase
+use Rhubarb\Patterns\Mvp\Crud\CrudView;
+
+class AccountsItemView extends CrudView
 {
-	use SaasTestCaseTrait;
-} 
+    public function createPresenters()
+    {
+        parent::createPresenters();
+
+        $this->addPresenters(
+            "AccountName"
+        );
+    }
+
+
+    protected function printViewContent()
+    {
+        $this->printFieldset("",
+            [
+                "AccountName",
+                "" => "{Save} {Cancel}"
+            ]);
+    }
+}

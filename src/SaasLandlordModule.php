@@ -19,13 +19,18 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord;
 
 use Rhubarb\Crown\Encryption\EncryptionProvider;
+use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\Module;
+use Rhubarb\Crown\UrlHandlers\ClassMappedUrlHandler;
+use Rhubarb\Patterns\Mvp\Crud\CrudUrlHandler;
+use Rhubarb\RestApi\Resources\ModelRestResource;
 use Rhubarb\RestApi\Resources\RestResource;
-use Rhubarb\RestApi\UrlHandlers\PostOnlyRestCollectionHandler;
 use Rhubarb\RestApi\UrlHandlers\RestCollectionHandler;
 use Rhubarb\RestApi\UrlHandlers\RestResourceHandler;
 use Rhubarb\RestApi\UrlHandlers\UnauthenticatedRestCollectionHandler;
+use Rhubarb\RestApi\UrlHandlers\UnauthenticatedRestResourceHandler;
 use Rhubarb\Scaffolds\AuthenticationWithRoles\AuthenticationWithRolesModule;
+use Rhubarb\Scaffolds\NavigationMenu\NavigationMenuModule;
 use Rhubarb\Scaffolds\TokenBasedRestApi\TokenBasedRestApiModule;
 use Rhubarb\Stem\Schema\SolutionSchema;
 
@@ -35,14 +40,14 @@ class SaasLandlordModule extends Module
 
     public function __construct($apiStubUrl = "/api/")
     {
-        parent::__construct();
-
         $this->apiStubUrl = $apiStubUrl;
     }
 
     protected function initialise()
     {
         SolutionSchema::registerSchema("SaasSchema", __NAMESPACE__ . "\Model\SaasSolutionSchema");
+
+        EncryptionProvider::setEncryptionProviderClassName('\Rhubarb\Scaffolds\Saas\Landlord\EncryptionProviders\SaasAes256EncryptionProvider');
 
         parent::initialise();
     }
@@ -51,7 +56,10 @@ class SaasLandlordModule extends Module
     {
         parent::registerDependantModules();
 
-        Module::registerModule(new AuthenticationWithRolesModule('\Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider'));
+        Module::registerModule(new LayoutModule('\Rhubarb\Scaffolds\Saas\Landlord\Layouts\LandlordLayout'));
+        Module::registerModule(new NavigationMenuModule());
+
+        Module::registerModule(new AuthenticationWithRolesModule('\Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\LandlordLoginProvider'));
 
         Module::registerModule(new TokenBasedRestApiModule(
             '\Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders\CredentialsAuthenticationProvider',
@@ -63,19 +71,21 @@ class SaasLandlordModule extends Module
     {
         parent::registerUrlHandlers();
 
-        RestResource::registerCanonicalResourceUrl(__NAMESPACE__ . '\RestResources\Accounts\AccountResource',
-            "/api/accounts");
+        RestResource::registerCanonicalResourceUrl(__NAMESPACE__ . '\RestResources\Accounts\AccountResource', "/api/accounts");
+
+        ModelRestResource::registerModelToResourceMapping("Server", "\Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\ServerResource");
 
         $urlHandlers =
             [
                 $this->apiStubUrl . "users" => new UnauthenticatedRestCollectionHandler(__NAMESPACE__ . '\RestResources\Users\UserResource',
                     [
+                        "/password-reset-invitations" => new UnauthenticatedRestResourceHandler(__NAMESPACE__ . '\RestResources\Users\PasswordResetInvitationResource', [], ["post", "put"]),
                         "/me" => new RestResourceHandler(__NAMESPACE__ . '\RestResources\Users\MeResource',
                             [
                                 "/accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource')
                             ])
                     ], ["post"]),
-                $this->apiStubUrl . "accounts" => new PostOnlyRestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource')
+                $this->apiStubUrl . "accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource')
             ];
 
         foreach ($urlHandlers as $handler) {
@@ -84,6 +94,11 @@ class SaasLandlordModule extends Module
 
         $this->addUrlHandlers($urlHandlers);
 
-        EncryptionProvider::setEncryptionProviderClassName('\Rhubarb\Scaffolds\Saas\Landlord\EncryptionProviders\SaasAes256EncryptionProvider');
+        $this->addUrlHandlers(
+            [
+                "/accounts/" => new CrudUrlHandler("Account", 'Rhubarb\Scaffolds\Saas\Landlord\Presenters\Accounts'),
+                "/users/" => new CrudUrlHandler("User", 'Rhubarb\Scaffolds\Saas\Landlord\Presenters\Users'),
+                "/" => new ClassMappedUrlHandler('\Rhubarb\Scaffolds\Saas\Landlord\Presenters\IndexPresenter'),
+            ]);
     }
 }

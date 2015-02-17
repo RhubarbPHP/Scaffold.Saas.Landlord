@@ -22,94 +22,129 @@ use Rhubarb\Crown\Context;
 use Rhubarb\Crown\Encryption\HashProvider;
 use Rhubarb\Crown\Http\HttpClient;
 use Rhubarb\Crown\Layout\LayoutModule;
-use Rhubarb\Crown\Module;
-use Rhubarb\Scaffolds\AuthenticationWithRoles\User;
-use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\Account;
-use Rhubarb\Scaffolds\Saas\Landlord\SaasLandlordModule;
 use Rhubarb\Stem\Models\Model;
 use Rhubarb\Stem\Repositories\Repository;
 use Rhubarb\Stem\Schema\SolutionSchema;
+use Rhubarb\Crown\Module;
+use Rhubarb\Scaffolds\AuthenticationWithRoles\User;
+use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\Account;
+use Rhubarb\Scaffolds\Saas\Landlord\Model\Infrastructure\Server;
+use Rhubarb\Scaffolds\Saas\Landlord\SaasLandlordModule;
 
 trait SaasTestCaseTrait
 {
-    /**
-     * @var Account
-     */
-    protected $steelInc;
+	/**
+	 * @var Account
+	 */
+	protected $steelInc;
 
-    /**
-     * @var User
-     */
-    protected $nigel;
+	/**
+	 * @var User
+	 */
+	protected $nigel;
 
-    public static function setUpBeforeClass()
-    {
-        Repository::setDefaultRepositoryClassName("\Rhubarb\Stem\Repositories\Offline\Offline");
+	protected $landlordUser;
 
-        SolutionSchema::clearSchemas();
+	public static function setUpBeforeClass()
+	{
+		Repository::setDefaultRepositoryClassName( "\Rhubarb\Stem\Repositories\Offline\Offline" );
 
-        Module::clearModules();
-        Module::registerModule(new SaasLandlordModule());
-        Module::initialiseModules();
+		SolutionSchema::clearSchemas();
 
-        LayoutModule::disableLayout();
+		Module::clearModules();
+		Module::registerModule( new SaasLandlordModule() );
+		Module::initialiseModules();
 
-        $context = new Context();
-        $context->UnitTesting = true;
+		LayoutModule::disableLayout();
 
-        $request = Context::currentRequest();
-        $request->reset();
+		$context = new Context();
+		$context->UnitTesting = true;
 
-        HashProvider::setHashProviderClassName("\Rhubarb\Crown\Encryption\Sha512HashProvider");
+		$request = Context::currentRequest();
+		$request->reset();
 
-        // Make sure HTTP requests go the unit testing route.
-        HttpClient::setDefaultHttpClientClassName('\Rhubarb\Crown\Tests\Fixtures\UnitTestingHttpClient');
-    }
+		HashProvider::setHashProviderClassName( "\Rhubarb\Crown\Encryption\Sha512HashProvider" );
 
-    protected function setUp()
-    {
-        Model::deleteRepositories();
+		// Make sure HTTP requests go the unit testing route.
+		HttpClient::setDefaultHttpClientClassName( '\Rhubarb\Crown\Tests\Fixtures\UnitTestingHttpClient' );
+	}
 
-        parent::setUp();
+	protected function setUp()
+	{
+		Model::deleteRepositories();
 
-        $user = new User();
-        $user->Username = "unit-tester";
-        $user->Password = '$6$rounds=10000$saltyfish$xsdN77OODY/XmxLdlkFW9CNxuE4H6NjEGG7K7tGJbzHUyDrVDHROL/FqG.ANet3dcd6WqGOOvaDjLv/WeAtcK0';
-        $user->Forename = "Unit Tester";
-        $user->Email = "ut@ut.com";
-        $user->Enabled = 1;
-        $user->save();
+		parent::setUp();
 
-        $account = new Account();
-        $account->AccountName = "Widgets Co";
-        $account->CredentialsIV = "";
-        $account->save();
+		$server = new Server();
+		$server->ServerName = "proton";
+		$server->Host = "1.2.3.5";
+		$server->Port = "9876";
+		$server->save();
 
-        $account->Users->append($user);
+		$server = new Server();
+		$server->ServerName = "electron";
+		$server->Host = "1.2.3.4";
+		$server->Port = "9876";
+		$server->save();
 
-        $account = new Account();
-        $account->AccountName = "Steel Inc.";
-        $account->save();
+		$user = new User();
+		$user->Username = "unit-tester";
+		$user->Password = '$6$rounds=10000$saltyfish$xsdN77OODY/XmxLdlkFW9CNxuE4H6NjEGG7K7tGJbzHUyDrVDHROL/FqG.ANet3dcd6WqGOOvaDjLv/WeAtcK0';
+		$user->Forename = "Unit Tester";
+		$user->Email = "ut@ut.com";
+		$user->Enabled = 1;
+		$user->save();
 
-        $this->steelInc = $account;
+		$account = new Account();
+		$account->AccountName = "Widgets Co";
+		$account->ServerID = $server->UniqueIdentifier;
+		$account->save();
 
-        $account->Users->append($user);
+		$account->Users->append( $user );
 
-        $unAttachedAccount = new Account();
-        $unAttachedAccount->AccountName = "Plastic Molders Ltd.";
-        $unAttachedAccount->save();
+		$account = new Account();
+		$account->AccountName = "Steel Inc.";
+		$account->save();
 
-        $this->nigel = new User();
-        $this->nigel->Username = "nigel";
-        $this->nigel->Password = '$6$rounds=10000$saltyfish$xsdN77OODY/XmxLdlkFW9CNxuE4H6NjEGG7K7tGJbzHUyDrVDHROL/FqG.ANet3dcd6WqGOOvaDjLv/WeAtcK0';
-        $this->nigel->Forename = "Nigel";
-        $this->nigel->Enabled = 1;
-        $this->nigel->save();
+		$this->steelInc = $account;
 
-        $account = new Account();
-        $account->AccountName = "Fundraises Inc.";
-        $account->save();
+		$account->Users->append( $user );
 
-        $account->Users->append( $this->nigel );
-    }
+		$user = new User();
+		$user->Username = "nigel";
+		$user->Password = '$6$rounds=10000$saltyfish$xsdN77OODY/XmxLdlkFW9CNxuE4H6NjEGG7K7tGJbzHUyDrVDHROL/FqG.ANet3dcd6WqGOOvaDjLv/WeAtcK0';
+		$user->Forename = "Nigel";
+		$user->Surname = "Stevenson";
+		$user->Enabled = 1;
+		$user->Email = "bignige@ut.com";
+		$user->save();
+
+		$this->nigel = $user;
+
+		$account = new Account();
+		$account->AccountName = "Proton Welding";
+		$account->save();
+
+		$account->Users->append( $user );
+
+		$user = new User();
+		$user->Username = "norma";
+		$user->Password = '$6$rounds=10000$saltyfish$xsdN77OODY/XmxLdlkFW9CNxuE4H6NjEGG7K7tGJbzHUyDrVDHROL/FqG.ANet3dcd6WqGOOvaDjLv/WeAtcK0';
+		$user->Forename = "Norma";
+		$user->Enabled = 0;
+		$user->Email = "norma@ut.com";
+		$user->save();
+
+		$unAttachedAccount = new Account();
+		$unAttachedAccount->AccountName = "Plastic Molders Ltd.";
+		$unAttachedAccount->save();
+
+		$this->landlordUser = new User();
+		$this->landlordUser->Username = "admin";
+		$this->landlordUser->Forename = "Administrator";
+		$this->landlordUser->setNewPassword( "admin" );
+		$this->landlordUser->Enabled = true;
+		$this->landlordUser->LandlordUser = true;
+		$this->landlordUser->save();
+	}
 } 

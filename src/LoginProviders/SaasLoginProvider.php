@@ -20,7 +20,9 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\LoginProviders;
 
 use Rhubarb\Scaffolds\Authentication\LoginProvider;
 
+/**
+ * The login provider used to serve tenant authentication requests.
+ */
 class SaasLoginProvider extends LoginProvider
 {
-
 } 

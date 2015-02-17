@@ -16,9 +16,28 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures;
+namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts;
 
-class SaasTestCase extends \PHPUnit_Framework_TestCase
+use Rhubarb\RestApi\Resources\ModelRestResource;
+
+class ServerResource extends ModelRestResource
 {
-	use SaasTestCaseTrait;
-} 
+    /**
+     * Returns the name of the model to use for this resource.
+     *
+     * @return string
+     */
+    public function getModelName()
+    {
+        return "Server";
+    }
+
+    protected function getColumns()
+    {
+        $columns = parent::getColumns();
+        $columns[] = "Host";
+        $columns[] = "Port";
+
+        return $columns;
+    }
+}

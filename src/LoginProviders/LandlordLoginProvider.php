@@ -16,9 +16,23 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures;
+namespace Rhubarb\Scaffolds\Saas\Landlord\LoginProviders;
 
-class SaasTestCase extends \PHPUnit_Framework_TestCase
+use Rhubarb\Crown\LoginProviders\Exceptions\LoginFailedException;
+use Rhubarb\Scaffolds\Authentication\LoginProvider;
+
+/**
+ * The login provider to control authentication of users to the landlord admin system itself.
+ *
+ */
+class LandlordLoginProvider extends LoginProvider
 {
-	use SaasTestCaseTrait;
-} 
+    protected function checkUserIsPermitted($user)
+    {
+        parent::checkUserIsPermitted($user);
+
+        if (!$user->LandlordUser) {
+            throw new LoginFailedException();
+        }
+    }
+}

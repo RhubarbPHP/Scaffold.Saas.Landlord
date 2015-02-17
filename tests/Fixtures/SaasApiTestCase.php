@@ -1,4 +1,5 @@
 <?php
+
 /*
  *	Copyright 2015 RhubarbPHP
  *
@@ -21,27 +22,27 @@ use Rhubarb\RestApi\Tests\Fixtures\TokenAuthenticatedRestApiClientTestCase;
 
 class SaasApiTestCase extends TokenAuthenticatedRestApiClientTestCase
 {
-    use SaasTestCaseTrait;
+	use SaasTestCaseTrait;
 
-    function getApiUri()
-    {
-        return "/api";
-    }
+	protected function getApiUri()
+	{
+		return "/api";
+	}
 
-    function getUsername()
-    {
-        return "unit-tester";
-    }
+	protected function getUsername()
+	{
+		return "unit-tester";
+	}
 
-    protected $password = "abc123";
+	protected $password = "abc123";
 
-    function getPassword()
-    {
-        return $this->password;
-    }
+	protected function getPassword()
+	{
+		return $this->password;
+	}
 
-    function getTokensUri()
-    {
-        return "/tokens";
-    }
+	protected function getTokensUri()
+	{
+		return "/tokens";
+	}
 }

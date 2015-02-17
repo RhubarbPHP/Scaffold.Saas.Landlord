@@ -16,9 +16,17 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Layouts;
 
-class SaasTestCase extends \PHPUnit_Framework_TestCase
+use Rhubarb\Scaffolds\Authentication\Layouts\ApplicationLayout;
+use Rhubarb\Scaffolds\NavigationMenu\Presenters\TwoLevelMenuPresenter;
+
+class LandlordLayout extends ApplicationLayout
 {
-	use SaasTestCaseTrait;
+    protected function printMenu()
+    {
+        $menu = new TwoLevelMenuPresenter();
+
+        print $menu;
+    }
 } 

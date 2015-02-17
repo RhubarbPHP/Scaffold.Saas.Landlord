@@ -18,78 +18,85 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\Tests\RestResources\Users;
 
-use Rhubarb\Stem\Filters\Equals;
-use Rhubarb\Scaffolds\AuthenticationWithRoles\User;
 use Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures\SaasApiTestCase;
+use Rhubarb\Scaffolds\AuthenticationWithRoles\User;
+use Rhubarb\Stem\Filters\Equals;
 
 class UserRegistrationResourceTest extends SaasApiTestCase
 {
-	public function getUsername()
-	{
-		// Forcibly disable authentication
-		return "";
-	}
+    public function getUsername()
+    {
+        // Forcibly disable authentication
+        return "";
+    }
 
-	public function getPassword()
-	{
-		// Forcibly disable authentication
-		return "";
-	}
+    public function getPassword()
+    {
+        // Forcibly disable authentication
+        return "";
+    }
 
-	protected function GetToken()
-	{
-		return "faketoken";
-	}
+    protected function GetToken()
+    {
+        return "faketoken";
+    }
 
-	public function testPublicCanRegister()
-	{
-		// Test you must supply key details
-		$result = $this->makeApiCall( "/users", "post", [
-			"Username" => ""
-		]);
+    public function testPublicCanRegister()
+    {
+        // Test you must supply key details
+        $result = $this->makeApiCall("/users", "post", [
+            "Username" => ""
+        ]);
 
-		$this->assertFalse( $result->result->status );
+        $this->assertFalse($result->result->status);
 
-		$result = $this->makeApiCall( "/users", "post", [
-			"Username" => "abc123",
-			"Forename" => ""
-		]);
+        $result = $this->makeApiCall("/users", "post", [
+            "Username" => "abc123",
+            "Forename" => ""
+        ]);
 
-		$this->assertFalse( $result->result->status );
+        $this->assertFalse($result->result->status);
 
-		$result = $this->makeApiCall( "/users", "post", [
-			"Username" => "abc123",
-			"Forename" => "test",
-			"NewPassword" => "abc",
-		]);
+        $result = $this->makeApiCall("/users", "post", [
+            "Username" => "abc123",
+            "Forename" => "Andrew"
+        ]);
 
-		$this->assertEquals( "test", $result->Forename );
+        $this->assertFalse($result->result->status, "You should need to supply a password");
 
-		$result = $this->makeApiCall( "/users", "post", [
-			"Username" => "nancy",
-			"NewPassword" => "bell",
-			"Email" => "jbloggs@hotmail.com",
-			"Forename" => "Nancy",
-			"Surname" => "Bell"
-		]);
+        $result = $this->makeApiCall("/users", "post", [
+            "Username" => "abc123",
+            "Forename" => "test",
+            "NewPassword" => "abc",
+        ]);
 
-		$this->assertEquals( $result->Email, User::FindFirst( new Equals( "Username", "nancy" ) )->Email );
+        $this->assertEquals("test", $result->Forename);
 
-		// Test you can't update users through this call.
+        $result = $this->makeApiCall("/users", "post", [
+            "Username" => "nancy",
+            "NewPassword" => "bell",
+            "Email" => "jbloggs@hotmail.com",
+            "Forename" => "Nancy",
+            "Surname" => "Bell"
+        ]);
 
-		$result = $this->makeApiCall( "/users/".$result->_id, "put", $result );
+        $this->assertEquals($result->Email, User::FindFirst(new Equals("Username", "nancy"))->Email);
 
-		$this->assertFalse( $result->result->status );
+        // Test you can't update users through this call.
 
-		// Test you can't create a duplicate on username.
-		$result = $this->makeApiCall( "/users", "post", [
-			"Username" => "nancy",
-			"NewPassword" => "bell",
-			"Email" => "jbloggs@hotmail.com",
-			"Forename" => "Nancy",
-			"Surname" => "Bell"
-		]);
+        $result = $this->makeApiCall("/users/" . $result->_id, "put", $result);
 
-		$this->assertFalse( $result->result->status );
-	}
+        $this->assertFalse($result->result->status);
+
+        // Test you can't create a duplicate on username.
+        $result = $this->makeApiCall("/users", "post", [
+            "Username" => "nancy",
+            "NewPassword" => "bell",
+            "Email" => "jbloggs@hotmail.com",
+            "Forename" => "Nancy",
+            "Surname" => "Bell"
+        ]);
+
+        $this->assertFalse($result->result->status);
+    }
 }

@@ -19,6 +19,7 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users;
 
 use Rhubarb\Crown\Logging\Log;
+use Rhubarb\RestApi\Exceptions\RestRequestPayloadValidationException;
 use Rhubarb\RestApi\Resources\ModelRestResource;
 
 class UserResource extends ModelRestResource
@@ -38,11 +39,21 @@ class UserResource extends ModelRestResource
         return ["Username", "Forename", "Surname", "Email", "Enabled"];
     }
 
+    public function validateRequestPayload($payload, $method)
+    {
+        if ($method == "post") {
+            if (!isset($payload["NewPassword"]) || $payload["NewPassword"] == "") {
+                throw new RestRequestPayloadValidationException("New users must have a password");
+            }
+        }
+
+        parent::validateRequestPayload($payload, $method);
+    }
+
     protected function beforeModelUpdated($model, $restResource)
     {
         if (isset($restResource["NewPassword"])) {
-            Log::Debug("User `" . $model->RealName . "` (`" . $model->UniqueIdentifier . "`) password changed.",
-                "SaaS");
+            Log::debug("User `" . $model->FullName . "` (`" . $model->UniqueIdentifier . "`) password changed.", "SaaS");
 
             $model->setNewPassword($restResource["NewPassword"]);
         }

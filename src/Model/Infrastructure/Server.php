@@ -37,9 +37,11 @@ class Server extends Model
         $schema->addColumn(
             new AutoIncrement("ServerID"),
             new Varchar("ServerName", 50),
-            new EncryptedVarchar("Host", 40),
-            new EncryptedVarchar("Port", 10)
+            new EncryptedVarchar("Host", 80),
+            new EncryptedVarchar("Port", 25)
         );
+
+        $schema->labelColumnName = "ServerName";
 
         return $schema;
     }

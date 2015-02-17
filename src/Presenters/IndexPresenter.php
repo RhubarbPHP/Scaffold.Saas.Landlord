@@ -16,9 +16,14 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters;
 
-class SaasTestCase extends \PHPUnit_Framework_TestCase
+use Rhubarb\Leaf\Presenters\Forms\Form;
+
+class IndexPresenter extends Form
 {
-	use SaasTestCaseTrait;
-} 
+    protected function createView()
+    {
+        return new IndexView();
+    }
+}

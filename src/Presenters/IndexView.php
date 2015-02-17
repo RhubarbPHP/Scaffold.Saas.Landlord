@@ -16,9 +16,16 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters;
 
-class SaasTestCase extends \PHPUnit_Framework_TestCase
+use Rhubarb\Leaf\Views\HtmlView;
+
+class IndexView extends HtmlView
 {
-	use SaasTestCaseTrait;
-} 
+    protected function printViewContent()
+    {
+		?>
+	    <p>Welcome to the landlord dashboard</p>
+		<?php
+    }
+}

@@ -19,11 +19,15 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts;
 
 use Rhubarb\Crown\Logging\Log;
-use Rhubarb\RestApi\Resources\ModelRestResource;
 use Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider;
+use Rhubarb\RestApi\Resources\ModelRestResource;
+use Rhubarb\Stem\Collections\Collection;
+use Rhubarb\Stem\Filters\CollectionPropertyMatches;
+use string;
 
 class AccountResource extends ModelRestResource
 {
+
     /**
      * Returns the name of the model to use for this resource.
      *
@@ -32,6 +36,16 @@ class AccountResource extends ModelRestResource
     public function getModelName()
     {
         return "Account";
+    }
+
+    protected function getColumns()
+    {
+        $columns = parent::getColumns();
+        $columns["UniqueReference"] = "UniqueReference";
+        $columns["CredentialsIV"] = "CredentialsIV";
+        $columns["Server"] = "Server";
+
+        return $columns;
     }
 
     public function afterModelCreated($model, $restResource)
@@ -45,14 +59,14 @@ class AccountResource extends ModelRestResource
         $user->Accounts->append($model);
     }
 
-    protected function getColumns()
+    public function filterModelCollectionForSecurity(Collection $collection)
     {
-        return
-        [
-            "AccountName",
-            "UniqueReference",
-            "CredentialsIV",
-            "Server"
-        ];
+        $login = new SaasLoginProvider();
+
+        $model = $login->getModel();
+
+        $collection->filter(new CollectionPropertyMatches("UsersRaw", "UserID", $model->UniqueIdentifier));
+
+        parent::filterModelCollectionForSecurity($collection);
     }
 }

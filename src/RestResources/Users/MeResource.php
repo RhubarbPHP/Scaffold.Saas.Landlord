@@ -22,11 +22,22 @@ use Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider;
 
 class MeResource extends UserResource
 {
+    private $user;
+
+    public function __construct($resourceIdentifier = null, $parentResource = null)
+    {
+        parent::__construct($resourceIdentifier, $parentResource);
+
+        // If the user is authenticated we can simply get the logged in model. Otherwise this
+        // will throw an exception.
+        $login = new SaasLoginProvider();
+        $this->user = $login->getModel();
+
+        $this->_id = $this->user->UniqueIdentifier;
+    }
+
     public function getModel()
     {
-        $login = new SaasLoginProvider();
-        $user = $login->getModel();
-
-        return $user;
+        return $this->user;
     }
 } 
