@@ -19,10 +19,10 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\Model\Infrastructure;
 
 use Rhubarb\Stem\Models\Model;
-use Rhubarb\Stem\Repositories\MySql\Schema\Columns\AutoIncrement;
-use Rhubarb\Stem\Repositories\MySql\Schema\Columns\EncryptedVarchar;
-use Rhubarb\Stem\Repositories\MySql\Schema\Columns\Varchar;
-use Rhubarb\Stem\Repositories\MySql\Schema\MySqlSchema;
+use Rhubarb\Stem\Schema\Columns\AutoIncrement;
+use Rhubarb\Stem\Schema\Columns\EncryptedString;
+use Rhubarb\Stem\Schema\Columns\String;
+use Rhubarb\Stem\Schema\ModelSchema;
 
 class Server extends Model
 {
@@ -33,12 +33,12 @@ class Server extends Model
      */
     public function createSchema()
     {
-        $schema = new MySqlSchema("tblServer");
+        $schema = new ModelSchema("tblServer");
         $schema->addColumn(
             new AutoIncrement("ServerID"),
-            new Varchar("ServerName", 50),
-            new EncryptedVarchar("Host", 80),
-            new EncryptedVarchar("Port", 25)
+            new String("ServerName", 50),
+            new EncryptedString("Host", 80),
+            new EncryptedString("Port", 25)
         );
 
         $schema->labelColumnName = "ServerName";

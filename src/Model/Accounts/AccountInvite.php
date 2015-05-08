@@ -19,16 +19,16 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts;
 
 use Rhubarb\Stem\Models\Model;
-use Rhubarb\Stem\Repositories\MySql\Schema\Columns\AutoIncrement;
-use Rhubarb\Stem\Repositories\MySql\Schema\Columns\DateTime;
-use Rhubarb\Stem\Repositories\MySql\Schema\Columns\ForeignKey;
-use Rhubarb\Stem\Repositories\MySql\Schema\MySqlSchema;
+use Rhubarb\Stem\Schema\Columns\AutoIncrement;
+use Rhubarb\Stem\Schema\Columns\DateTime;
+use Rhubarb\Stem\Schema\Columns\ForeignKey;
+use Rhubarb\Stem\Schema\ModelSchema;
 
 class AccountInvite extends Model
 {
     public function createSchema()
     {
-        $schema = new MySqlSchema("tblAccountInvite");
+        $schema = new ModelSchema("tblAccountInvite");
         $schema->addColumn(
             new AutoIncrement("AccountInviteID"),
             new ForeignKey("AccountID"),

@@ -19,7 +19,7 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\Model\Users;
 
 use Rhubarb\Stem\Filters\Equals;
-use Rhubarb\Stem\Repositories\MySql\Schema\Columns\Boolean;
+use Rhubarb\Stem\Schema\Columns\Boolean;
 use Rhubarb\Stem\Schema\ModelSchema;
 
 class User extends \Rhubarb\Scaffolds\AuthenticationWithRoles\User

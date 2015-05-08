@@ -23,23 +23,23 @@ use Rhubarb\Scaffolds\Authentication\User;
 use Rhubarb\Stem\Aggregates\Count;
 use Rhubarb\Stem\Filters\Equals;
 use Rhubarb\Stem\Models\Model;
-use Rhubarb\Stem\Repositories\MySql\Schema\Columns\AutoIncrement;
-use Rhubarb\Stem\Repositories\MySql\Schema\Columns\EncryptedVarchar;
-use Rhubarb\Stem\Repositories\MySql\Schema\Columns\ForeignKey;
-use Rhubarb\Stem\Repositories\MySql\Schema\Columns\Varchar;
-use Rhubarb\Stem\Repositories\MySql\Schema\MySqlSchema;
+use Rhubarb\Stem\Schema\Columns\AutoIncrement;
+use Rhubarb\Stem\Schema\Columns\EncryptedString;
+use Rhubarb\Stem\Schema\Columns\ForeignKey;
+use Rhubarb\Stem\Schema\Columns\String;
+use Rhubarb\Stem\Schema\ModelSchema;
 
 class Account extends Model
 {
     public function createSchema()
     {
-        $schema = new MySqlSchema("tblAccount");
+        $schema = new ModelSchema("tblAccount");
         $schema->addColumn(
             new AutoIncrement("AccountID"),
             new ForeignKey("ServerID"),
-            new Varchar("AccountName", 50),
-            new Varchar("UniqueReference", 50),
-            new EncryptedVarchar("CredentialsIV", 120)
+            new String("AccountName", 50),
+            new String("UniqueReference", 50),
+            new EncryptedString("CredentialsIV", 120)
         );
 
         $schema->labelColumnName = "AccountName";
