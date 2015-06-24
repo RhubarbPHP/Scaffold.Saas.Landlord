@@ -45,4 +45,15 @@ class Server extends Model
 
         return $schema;
     }
+
+    protected function getPublicPropertyList()
+    {
+        $list = parent::getPublicPropertyList();
+        $list[] = "Host";
+        $list[] = "Port";
+
+        return $list;
+    }
+
+
 }
