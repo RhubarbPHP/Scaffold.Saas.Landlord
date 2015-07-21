@@ -23,14 +23,16 @@ use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\Module;
 use Rhubarb\Crown\UrlHandlers\ClassMappedUrlHandler;
 use Rhubarb\Patterns\Mvp\Crud\CrudUrlHandler;
+use Rhubarb\RestApi\Resources\ApiDescriptionResource;
 use Rhubarb\RestApi\Resources\ModelRestResource;
-use Rhubarb\RestApi\Resources\RestResource;
+use Rhubarb\RestApi\UrlHandlers\RestApiRootHandler;
 use Rhubarb\RestApi\UrlHandlers\RestCollectionHandler;
 use Rhubarb\RestApi\UrlHandlers\RestResourceHandler;
 use Rhubarb\RestApi\UrlHandlers\UnauthenticatedRestCollectionHandler;
 use Rhubarb\RestApi\UrlHandlers\UnauthenticatedRestResourceHandler;
 use Rhubarb\Scaffolds\AuthenticationWithRoles\AuthenticationWithRolesModule;
 use Rhubarb\Scaffolds\NavigationMenu\NavigationMenuModule;
+use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\ServerResource;
 use Rhubarb\Scaffolds\TokenBasedRestApi\TokenBasedRestApiModule;
 use Rhubarb\Stem\Schema\SolutionSchema;
 
@@ -38,7 +40,7 @@ class SaasLandlordModule extends Module
 {
     private $apiStubUrl;
 
-    public function __construct($apiStubUrl = "/api/")
+    public function __construct($apiStubUrl = "/api")
     {
         $this->apiStubUrl = $apiStubUrl;
     }
@@ -71,13 +73,11 @@ class SaasLandlordModule extends Module
     {
         parent::registerUrlHandlers();
 
-        RestResource::registerCanonicalResourceUrl(__NAMESPACE__ . '\RestResources\Accounts\AccountResource', "/api/accounts");
+        ModelRestResource::registerModelToResourceMapping("Server", ServerResource::class );
 
-        ModelRestResource::registerModelToResourceMapping("Server", "\Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\ServerResource");
-
-        $urlHandlers =
+        $rootApiUrl = new RestApiRootHandler( ApiDescriptionResource::class,
             [
-                $this->apiStubUrl . "users" => new UnauthenticatedRestCollectionHandler(__NAMESPACE__ . '\RestResources\Users\UserResource',
+                "/users" => new UnauthenticatedRestCollectionHandler(__NAMESPACE__ . '\RestResources\Users\UserResource',
                     [
                         "/password-reset-invitations" => new UnauthenticatedRestResourceHandler(__NAMESPACE__ . '\RestResources\Users\PasswordResetInvitationResource', [], ["post", "put"]),
                         "/me" => new RestResourceHandler(__NAMESPACE__ . '\RestResources\Users\MeResource',
@@ -85,14 +85,16 @@ class SaasLandlordModule extends Module
                                 "/accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource')
                             ])
                     ], ["post"]),
-                $this->apiStubUrl . "accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource')
-            ];
+                "/accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource')
+            ] );
 
-        foreach ($urlHandlers as $handler) {
-            $handler->setPriority(20);
-        }
+        $rootApiUrl->setPriority(20);
 
-        $this->addUrlHandlers($urlHandlers);
+        $this->addUrlHandlers(
+            [
+                $this->apiStubUrl => $rootApiUrl
+            ]
+        );
 
         $this->addUrlHandlers(
             [
