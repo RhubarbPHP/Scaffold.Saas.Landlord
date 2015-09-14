@@ -19,6 +19,8 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\Model;
 
 use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Exceptions\ImplementationException;
+use Rhubarb\Scaffolds\Saas\Landlord\SaasLandlordModule;
 use Rhubarb\Stem\Models\ModelEventManager;
 use Rhubarb\Stem\Repositories\MySql\MySql;
 use Rhubarb\Stem\Schema\SolutionSchema;
@@ -56,7 +58,17 @@ class SaasSolutionSchema extends SolutionSchema
 
                 // Attempt to create the database for this account.
                 MySql::executeStatement("CREATE DATABASE IF NOT EXISTS `" . $account->UniqueReference . "`", [], $connection);
-                MySql::executeStatement("GRANT ALL ON `" . $account->UniqueReference . "`.* TO '" . $account->UniqueReference . "'@'localhost' IDENTIFIED BY '" . $password . "'", [], $connection);
+
+                $tenantServers = array_merge(SaasLandlordModule::getTenantServerIPAddresses(), SaasLandlordModule::getTenantServerMasks());
+                if (count($tenantServers) === 0) {
+                    throw new ImplementationException('No tenant servers defined - use SaasLandlordModule::registerTenantServer() to register some IP Addresses.');
+                }
+                // grant for all tenant
+                foreach ($tenantServers as $tenantServer) {
+                    MySql::executeStatement(
+                        "GRANT ALL ON `" . $account->UniqueReference . "`.* TO '" . $account->UniqueReference . "'@'" . $tenantServer . "' IDENTIFIED BY '" . $password . "'",
+                        [], $connection);
+                }
             }
         });
     }

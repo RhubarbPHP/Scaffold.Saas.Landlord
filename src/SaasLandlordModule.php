@@ -103,4 +103,90 @@ class SaasLandlordModule extends Module
                 "/" => new ClassMappedUrlHandler('\Rhubarb\Scaffolds\Saas\Landlord\Presenters\IndexPresenter'),
             ]);
     }
+
+    protected static $tenantServerIPAddresses = [];
+    protected static $tenantServerMasks = [];
+
+    /**
+     * @param string $tenantServer An ip address or CIDR subnet mask
+     */
+    public static function registerTenantServer($tenantServer)
+    {
+        if (strpos($tenantServer, '/') !== false) {
+            self::registerTenantServerMask($tenantServer);
+        } else {
+            self::registerTenantServerIPAddress($tenantServer);
+        }
+    }
+
+    /**
+     * @param string $mask
+     */
+    public static function registerTenantServerMask($mask)
+    {
+        self::$tenantServerMasks[] = $mask;
+    }
+
+    /**
+     * @param string $ipAddress
+     */
+    public static function registerTenantServerIPAddress($ipAddress)
+    {
+        self::$tenantServerIPAddresses[] = $ipAddress;
+    }
+
+    public static function clearRegisteredTenantServers()
+    {
+        self::$tenantServerIPAddresses = [];
+        self::$tenantServerMasks = [];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTenantServerIPAddresses()
+    {
+        return self::$tenantServerIPAddresses;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTenantServerMasks()
+    {
+        return self::$tenantServerMasks;
+    }
+
+    /**
+     * @param string $ipAddress
+     *
+     * @return bool
+     */
+    public static function isTenantServer($ipAddress)
+    {
+        if (in_array($ipAddress, self::getTenantServerIPAddresses())) {
+            return true;
+        }
+        foreach (self::getTenantServerMasks() as $mask) {
+            if (self::checkIPAddressAgainstCIDRMask($ipAddress, $mask)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $ipAddress
+     * @param string $CIDRMask
+     *
+     * @return bool
+     */
+    protected static function checkIPAddressAgainstCIDRMask($ipAddress, $CIDRMask)
+    {
+        list( $mask, $CIDRSuffix ) = explode('/', $CIDRMask);
+
+        return ( ip2long($ipAddress) & ~( ( 1 << ( 32 - $CIDRSuffix ) ) - 1 ) ) == ip2long($mask);
+    }
+
 }
