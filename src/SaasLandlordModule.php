@@ -32,16 +32,28 @@ use Rhubarb\RestApi\UrlHandlers\UnauthenticatedRestCollectionHandler;
 use Rhubarb\RestApi\UrlHandlers\UnauthenticatedRestResourceHandler;
 use Rhubarb\Scaffolds\AuthenticationWithRoles\AuthenticationWithRolesModule;
 use Rhubarb\Scaffolds\NavigationMenu\NavigationMenuModule;
+use Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders\CredentialsAuthenticationProvider;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\ServerResource;
+use Rhubarb\Scaffolds\Saas\Landlord\Settings\SaasLandlordModuleSettings;
+use Rhubarb\Scaffolds\TokenBasedRestApi\Authentication\TokenAuthenticationProvider;
 use Rhubarb\Scaffolds\TokenBasedRestApi\TokenBasedRestApiModule;
 use Rhubarb\Stem\Schema\SolutionSchema;
 
 class SaasLandlordModule extends Module
 {
     private $apiStubUrl;
+    private $authenticationProvider;
+    private $tokenAuthenticationProvider;
 
-    public function __construct($apiStubUrl = "/api")
+    public function __construct(
+        $apiStubUrl = "/api",
+        $authenticationProvider = CredentialsAuthenticationProvider::class,
+        $tokenAuthenticationProvider = TokenAuthenticationProvider::class
+    )
     {
+        $settings = new SaasLandlordModuleSettings();
+        $settings->AuthenticationProvider = $this->authenticationProvider = $authenticationProvider;
+        $settings->TokenAuthenticationProvider = $this->tokenAuthenticationProvider = $tokenAuthenticationProvider;
         $this->apiStubUrl = $apiStubUrl;
     }
 
@@ -64,8 +76,8 @@ class SaasLandlordModule extends Module
         Module::registerModule(new AuthenticationWithRolesModule('\Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\LandlordLoginProvider'));
 
         Module::registerModule(new TokenBasedRestApiModule(
-            '\Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders\CredentialsAuthenticationProvider',
-            '\Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders\TokenBasedAuthenticationProvider'
+            $this->authenticationProvider,
+            $this->tokenAuthenticationProvider
         ));
     }
 
@@ -88,7 +100,7 @@ class SaasLandlordModule extends Module
                 "/accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource')
             ] );
 
-        $rootApiUrl->setPriority(20);
+        $rootApiUrl->setPriority(1000);
 
         $this->addUrlHandlers(
             [

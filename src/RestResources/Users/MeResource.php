@@ -19,10 +19,12 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users;
 
 use Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider;
+use Rhubarb\Stem\Collections\Collection;
+use Rhubarb\Stem\Filters\Equals;
+use RightRevenue\Landlord\LoginProviders\RightRevenueTenantLoginProvider;
 
 class MeResource extends UserResource
 {
-    private $user;
 
     public function __construct($resourceIdentifier = null, $parentResource = null)
     {
@@ -30,14 +32,16 @@ class MeResource extends UserResource
 
         // If the user is authenticated we can simply get the logged in model. Otherwise this
         // will throw an exception.
-        $login = new SaasLoginProvider();
-        $this->user = $login->getModel();
+        $login = new RightRevenueTenantLoginProvider();
+        $this->model = $login->getModel();
 
-        $this->_id = $this->user->UniqueIdentifier;
+        $this->_id = $this->model->getUniqueIdentifier();
     }
 
-    public function getModel()
+    public function filterModelCollectionForSecurity(Collection $collection)
     {
-        return $this->user;
+        parent::filterModelCollectionForSecurity();
+        $collection->filter( new Equals($this->model->UniqueIdentifierColumnName, $this->model->UniqueIdentifier) );
     }
-} 
+
+}

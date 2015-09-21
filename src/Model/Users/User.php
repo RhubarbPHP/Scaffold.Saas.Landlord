@@ -18,7 +18,10 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\Model\Users;
 
+use Rhubarb\Stem\Collections\Collection;
+use Rhubarb\Stem\Filters\AndGroup;
 use Rhubarb\Stem\Filters\Equals;
+use Rhubarb\Stem\Filters\Filter;
 use Rhubarb\Stem\Schema\Columns\Boolean;
 use Rhubarb\Stem\Schema\ModelSchema;
 
@@ -31,13 +34,41 @@ class User extends \Rhubarb\Scaffolds\AuthenticationWithRoles\User
         parent::extendSchema($schema);
     }
 
-    public static function findTenantUsers()
+    /**
+     * @param Filter|null $filter
+     *
+     * @return Collection|static[]
+     */
+    public static function findTenantUsers($filter = null)
     {
-        return self::find(new Equals("LandlordUser", false));
+        return self::findUsersWithLandlordUserFlag($filter, false);
     }
 
-    public static function findLandlordUsers()
+    /**
+     * @param Filter|null $filter
+     *
+     * @return Collection|static[]
+     */
+    public static function findLandlordUsers($filter = null)
     {
-        return self::find(new Equals("LandlordUser", true));
+        return self::findUsersWithLandlordUserFlag($filter, true);
+    }
+
+    /**
+     * @param Filter|null $filter
+     * @param bool        $landlordUserFlag
+     *
+     * @return Collection|static[]
+     */
+    private static function findUsersWithLandlordUserFlag($filter, $landlordUserFlag)
+    {
+        $landlordUserFilter = new Equals('LandlordUser', $landlordUserFlag);
+        if ($filter === null) {
+            $filter = $landlordUserFilter;
+        } else {
+            $filter = new AndGroup([$filter, $landlordUserFilter]);
+        }
+
+        return self::find($filter);
     }
 } 
