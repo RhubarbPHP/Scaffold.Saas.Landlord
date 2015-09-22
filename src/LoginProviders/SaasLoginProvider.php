@@ -18,6 +18,7 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\LoginProviders;
 
+use Rhubarb\Crown\LoginProviders\Exceptions\LoginFailedException;
 use Rhubarb\Scaffolds\Authentication\LoginProvider;
 
 /**
@@ -25,4 +26,12 @@ use Rhubarb\Scaffolds\Authentication\LoginProvider;
  */
 class SaasLoginProvider extends LoginProvider
 {
+    public function login($username, $password)
+    {
+        try {
+            parent::login($username,$password);
+        } catch( LoginFailedException $er ){
+            Log::debug( "Attempting login using token for {$username}", "LOGIN" );
+        }
+    }
 } 

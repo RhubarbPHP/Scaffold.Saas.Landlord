@@ -36,6 +36,14 @@ class MeResource extends UserResource
         $this->_id = $this->user->UniqueIdentifier;
     }
 
+    protected function getColumns()
+    {
+        $columns = parent::getColumns();
+        $columns[] = "Token";
+
+        return $columns;
+    }
+
     public function getModel()
     {
         return $this->user;
