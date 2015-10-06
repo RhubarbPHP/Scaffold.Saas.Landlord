@@ -77,13 +77,13 @@ class SaasLandlordModule extends Module
 
         $rootApiUrl = new RestApiRootHandler( ApiDescriptionResource::class,
             [
+                "/users/me" => new RestResourceHandler(__NAMESPACE__ . '\RestResources\Users\MeResource',
+                    [
+                        "/accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource')
+                    ]),
                 "/users" => new UnauthenticatedRestCollectionHandler(__NAMESPACE__ . '\RestResources\Users\UserResource',
                     [
                         "/password-reset-invitations" => new UnauthenticatedRestResourceHandler(__NAMESPACE__ . '\RestResources\Users\PasswordResetInvitationResource', [], ["post", "put"]),
-                        "/me" => new RestResourceHandler(__NAMESPACE__ . '\RestResources\Users\MeResource',
-                            [
-                                "/accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource')
-                            ])
                     ], ["post"]),
                 "/accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource')
             ] );
