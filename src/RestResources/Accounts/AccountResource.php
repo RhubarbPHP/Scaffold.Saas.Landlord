@@ -19,11 +19,10 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts;
 
 use Rhubarb\Crown\Logging\Log;
-use Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider;
 use Rhubarb\RestApi\Resources\ModelRestResource;
+use Rhubarb\Scaffolds\Saas\Landlord\SaasLandlordModule;
 use Rhubarb\Stem\Collections\Collection;
 use Rhubarb\Stem\Filters\CollectionPropertyMatches;
-use RightRevenue\Landlord\LoginProviders\RightRevenueTenantLoginProvider;
 use string;
 
 class AccountResource extends ModelRestResource
@@ -54,7 +53,7 @@ class AccountResource extends ModelRestResource
         Log::Debug("Account `" . $model->AccountName . "` created", "SaaS");
 
         // Make sure that new accounts are attached to the authenticated user.
-        $login = new RightRevenueTenantLoginProvider();
+        $login = SaasLandlordModule::getTenantLoginProvider();
         $user = $login->getModel();
 
         $user->Accounts->append($model);
@@ -62,7 +61,7 @@ class AccountResource extends ModelRestResource
 
     public function filterModelCollectionForSecurity(Collection $collection)
     {
-        $login = new RightRevenueTenantLoginProvider();
+        $login = SaasLandlordModule::getTenantLoginProvider();
 
         $model = $login->getModel();
 

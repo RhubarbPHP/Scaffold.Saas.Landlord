@@ -89,14 +89,11 @@ class SaasLandlordModule extends Module
 
         $rootApiUrl = new RestApiRootHandler( ApiDescriptionResource::class,
             [
-                "/users" => new UnauthenticatedRestCollectionHandler(__NAMESPACE__ . '\RestResources\Users\UserResource',
+                "/users" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Users\UserResource',
                     [
                         "/password-reset-invitations" => new UnauthenticatedRestResourceHandler(__NAMESPACE__ . '\RestResources\Users\PasswordResetInvitationResource', [], ["post", "put"]),
-                        "/me" => new RestResourceHandler(__NAMESPACE__ . '\RestResources\Users\MeResource',
-                            [
-                                "/accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource')
-                            ])
-                    ], ["post"]),
+                        "/accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource')
+                    ], ["post", "put", "get"]),
                 "/accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource')
             ] );
 
@@ -199,6 +196,15 @@ class SaasLandlordModule extends Module
         list( $mask, $CIDRSuffix ) = explode('/', $CIDRMask);
 
         return ( ip2long($ipAddress) & ~( ( 1 << ( 32 - $CIDRSuffix ) ) - 1 ) ) == ip2long($mask);
+    }
+
+    public static function getTenantLoginProvider()
+    {
+        $settings = new SaasLandlordModuleSettings();
+        $authenticationProviderClassName = $settings->AuthenticationProvider;
+        /** @var CredentialsAuthenticationProvider $authenticationProvider */
+        $authenticationProvider = new $authenticationProviderClassName();
+        return $authenticationProvider->getLoginProvider();
     }
 
 }

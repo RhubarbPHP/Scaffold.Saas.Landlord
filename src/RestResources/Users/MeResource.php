@@ -18,21 +18,21 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users;
 
-use Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider;
+use Rhubarb\RestApi\Resources\RestResource;
+use Rhubarb\Scaffolds\Saas\Landlord\SaasLandlordModule;
 use Rhubarb\Stem\Collections\Collection;
 use Rhubarb\Stem\Filters\Equals;
-use RightRevenue\Landlord\LoginProviders\RightRevenueTenantLoginProvider;
 
 class MeResource extends UserResource
 {
 
-    public function __construct($resourceIdentifier = null, $parentResource = null)
+    public function __construct(RestResource $parentResource = null)
     {
-        parent::__construct($resourceIdentifier, $parentResource);
+        parent::__construct($parentResource);
 
         // If the user is authenticated we can simply get the logged in model. Otherwise this
         // will throw an exception.
-        $login = new RightRevenueTenantLoginProvider();
+        $login = SaasLandlordModule::getTenantLoginProvider();
         $this->model = $login->getModel();
 
         $this->_id = $this->model->getUniqueIdentifier();

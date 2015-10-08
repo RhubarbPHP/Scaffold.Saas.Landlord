@@ -21,9 +21,11 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users;
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\RestApi\Exceptions\RestRequestPayloadValidationException;
 use Rhubarb\RestApi\Resources\ModelRestResource;
+use Rhubarb\Scaffolds\Saas\Landlord\SaasLandlordModule;
 
 class UserResource extends ModelRestResource
 {
+
     /**
      * Returns the name of the model to use for this resource.
      *
@@ -58,4 +60,25 @@ class UserResource extends ModelRestResource
             $model->setNewPassword($restResource["NewPassword"]);
         }
     }
+
+    protected function getRestUniqueIdentifierColumnName()
+    {
+        return 'Username';
+    }
+
+    public function createItemResource($resourceIdentifier)
+    {
+        if( $resourceIdentifier === 'me' )
+        {
+            $login = SaasLandlordModule::getTenantLoginProvider();
+            $me = $login->getModel();
+            return $this->getItemResourceForModel( $me );
+        }
+        else
+        {
+            return parent::createItemResource($resourceIdentifier);
+        }
+    }
+
+
 }
