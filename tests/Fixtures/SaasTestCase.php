@@ -18,7 +18,7 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures;
 
-class SaasTestCase extends \PHPUnit_Framework_TestCase
+class SaasTestCase extends \Codeception\TestCase\Test
 {
 	use SaasTestCaseTrait;
 } 

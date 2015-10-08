@@ -18,16 +18,11 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures;
 
-use Rhubarb\RestApi\Tests\Fixtures\TokenAuthenticatedRestApiClientTestCase;
+use Rhubarb\Scaffolds\TokenBasedRestApi\Tests\Fixtures\TokenAuthenticatedRestApiClientTestCase;
 
 class SaasApiTestCase extends TokenAuthenticatedRestApiClientTestCase
 {
 	use SaasTestCaseTrait;
-
-	protected function getApiUri()
-	{
-		return "/api";
-	}
 
 	protected function getUsername()
 	{
@@ -39,10 +34,5 @@ class SaasApiTestCase extends TokenAuthenticatedRestApiClientTestCase
 	protected function getPassword()
 	{
 		return $this->password;
-	}
-
-	protected function getTokensUri()
-	{
-		return "/tokens";
 	}
 }

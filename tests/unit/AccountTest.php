@@ -1,52 +1,48 @@
 <?php
 
-/*
- *	Copyright 2015 RhubarbPHP
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-
-namespace Rhubarb\Scaffolds\Saas\Landlord\Tests\Model\Accounts;
 
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\Account;
+use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\User;
 use Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures\SaasTestCase;
-use Rhubarb\Scaffolds\AuthenticationWithRoles\User;
 
 class AccountTest extends SaasTestCase
 {
+    /**
+     * @var \UnitTester
+     */
+    protected $tester;
+
+    protected function _before()
+    {
+    }
+
+    protected function _after()
+    {
+    }
+
     public function testAccountGetsUniqueReference()
     {
         $account = new Account();
         $account->AccountName = "Grass Mongers";
         $account->save();
 
-        $this->assertEquals("grass-mongers", $account->UniqueReference);
+        $this->assertEquals("grass-mong", $account->UniqueReference);
 
         $account->save();
 
-        $this->assertEquals("grass-mongers", $account->UniqueReference, "The unique reference shouldn't change.");
+        $this->assertEquals("grass-mong", $account->UniqueReference, "The unique reference shouldn't change.");
 
         $account = new Account();
         $account->AccountName = "Herb Mongers";
         $account->save();
 
-        $this->assertEquals("herb-mongers", $account->UniqueReference);
+        $this->assertEquals("herb-monge", $account->UniqueReference);
 
         $account = new Account();
         $account->AccountName = "Herb Mongers";
         $account->save();
 
-        $this->assertEquals("herb-mongers-2", $account->UniqueReference, "Similar accounts should stil have a unique reference");
+        $this->assertEquals("herb-monge-2", $account->UniqueReference, "Similar accounts should stil have a unique reference");
 
         $account = new Account();
         $account->AccountName = "Tra-;Sf=  $";
@@ -115,4 +111,3 @@ class AccountTest extends SaasTestCase
         $this->assertEquals($this->steelInc->UniqueIdentifier, $user->Invites[0]->AccountID);
     }
 }
- 
