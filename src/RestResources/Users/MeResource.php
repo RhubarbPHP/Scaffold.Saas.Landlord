@@ -22,18 +22,16 @@ use Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider;
 
 class MeResource extends UserResource
 {
-    private $user;
-
-    public function __construct($resourceIdentifier = null, $parentResource = null)
+    public function __construct($parentResource = null)
     {
-        parent::__construct($resourceIdentifier, $parentResource);
+        parent::__construct($parentResource);
 
         // If the user is authenticated we can simply get the logged in model. Otherwise this
         // will throw an exception.
         $login = new SaasLoginProvider();
-        $this->user = $login->getModel();
+        $this->model = $login->getModel();
 
-        $this->_id = $this->user->UniqueIdentifier;
+        $this->_id = $this->model->UniqueIdentifier;
     }
 
     protected function getColumns()
@@ -42,10 +40,5 @@ class MeResource extends UserResource
         $columns[] = "Token";
 
         return $columns;
-    }
-
-    public function getModel()
-    {
-        return $this->user;
     }
 } 
