@@ -33,6 +33,7 @@ use Rhubarb\RestApi\UrlHandlers\UnauthenticatedRestResourceHandler;
 use Rhubarb\Scaffolds\AuthenticationWithRoles\AuthenticationWithRolesModule;
 use Rhubarb\Scaffolds\NavigationMenu\NavigationMenuModule;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\ServerResource;
+use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users\UserResource;
 use Rhubarb\Scaffolds\TokenBasedRestApi\TokenBasedRestApiModule;
 use Rhubarb\Stem\Schema\SolutionSchema;
 
@@ -85,7 +86,10 @@ class SaasLandlordModule extends Module
                     [
                         "/password-reset-invitations" => new UnauthenticatedRestResourceHandler(__NAMESPACE__ . '\RestResources\Users\PasswordResetInvitationResource', [], ["post", "put"]),
                     ], ["post"]),
-                "/accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource')
+                "/accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource',
+                    [
+                       "/users" => new RestCollectionHandler( UserResource::class, [], ["get", "post", "put" ] )
+                    ])
             ] );
 
         $rootApiUrl->setPriority(20);
