@@ -38,10 +38,20 @@ class AccountResource extends ModelRestResource
         return "Account";
     }
 
+    protected function getSkeleton()
+    {
+        $skeleton = parent::getSkeleton();
+
+        if ($this->model) {
+            $skeleton->_id = $this->getModel()->AccountID;
+        }
+
+        return $skeleton;
+    }
+
     protected function getColumns()
     {
         $columns = parent::getColumns();
-        $columns["UniqueReference"] = "UniqueReference";
         $columns["CredentialsIV"] = "CredentialsIV";
         $columns["Server"] = "Server";
 

@@ -15,4 +15,3 @@
                                                 POST to create a new invite
 /api/accounts/{AccountID}/invites/{InviteID}    GET/PUT to retrieve and update (cancel only) invite
 /api/accounts/{AccountID}/server-credentials    GET to retrieve credentials required for database selection (only available to known hosts)
-

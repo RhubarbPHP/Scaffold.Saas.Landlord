@@ -18,6 +18,7 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures;
 
+use Rhubarb\Crown\Module;
 use Rhubarb\Scaffolds\TokenBasedRestApi\Tests\Fixtures\TokenAuthenticatedRestApiClientTestCase;
 
 class SaasApiTestCase extends TokenAuthenticatedRestApiClientTestCase

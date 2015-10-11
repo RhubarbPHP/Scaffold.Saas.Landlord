@@ -21,8 +21,12 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users;
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\RestApi\Exceptions\RestRequestPayloadValidationException;
 use Rhubarb\RestApi\Resources\ModelRestResource;
+use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\AccountUser;
+use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\Invite;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountResource;
 use Rhubarb\Stem\Collections\Collection;
+use Rhubarb\Stem\Exceptions\RecordNotFoundException;
+use Rhubarb\Stem\Filters\AndGroup;
 use Rhubarb\Stem\Filters\CollectionPropertyMatches;
 use Rhubarb\Stem\Filters\Equals;
 
@@ -38,9 +42,28 @@ class UserResource extends ModelRestResource
         return "User";
     }
 
+    protected function getSkeleton()
+    {
+        $skeleton = parent::getSkeleton();
+
+        if ( $this->model ) {
+            $skeleton->_id = $this->getModel()->UUID;
+        }
+
+        return $skeleton;
+    }
+
+
     protected function getColumns()
     {
-        return ["Username", "Forename", "Surname", "Email", "Enabled"];
+        return [
+            "UUID",
+            "Username",
+            "Forename",
+            "Surname",
+            "Email",
+            "Enabled"
+        ];
     }
 
     public function validateRequestPayload($payload, $method)
@@ -70,6 +93,37 @@ class UserResource extends ModelRestResource
             Log::debug("User `" . $model->FullName . "` (`" . $model->UniqueIdentifier . "`) password changed.", "SaaS");
 
             $model->setNewPassword($restResource["NewPassword"]);
+        }
+    }
+
+    public function post($restResource)
+    {
+        if( isset( $restResource[ 'InviteUUID' ] ) )
+        {
+            $invite = new Invite( $restResource[ 'InviteUUID' ] );
+            $account = $invite->Account;
+            $user = $invite->User;
+            try{
+                AccountUser::findFirst(new AndGroup([
+                    new Equals('AccountID', $account->AccountID),
+                    new Equals('UserID', $user->UserID)
+                ]));
+            }
+            catch( RecordNotFoundException $ex )
+            {
+                $accountUser = new AccountUser();
+                $accountUser->AccountID = $account->AccountID;
+                $accountUser->UserID = $user->UserID;
+                $accountUser->save();
+            }
+
+            $this->setModel( $user );
+            $this->put($restResource);
+            return $this->get();
+        }
+        else
+        {
+            return parent::post($restResource);
         }
     }
 }

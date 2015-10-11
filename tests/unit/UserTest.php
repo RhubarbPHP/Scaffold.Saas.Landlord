@@ -18,6 +18,7 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\Tests\Model\Users;
 
+use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\Invite;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\User;
 use Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures\SaasTestCase;
 use Rhubarb\Stem\Filters\Equals;
@@ -35,6 +36,19 @@ class UserTest extends SaasTestCase
         $users->filter(new Equals("Username", "nigel"));
 
         $this->assertCount(0, $users, "The count of landlord users with username nigel should be zero.");
+    }
+
+    public function testUsersHaveGUID()
+    {
+        $user = new User();
+        $user->Username = 'someGuy';
+        $user->Forename = 'some';
+        $user->Surname = 'guy';
+        $user->Email = 'some@guy.com';
+        $user->NewPassword = 'i am some guy';
+        $user->Save();
+
+        $this->assertNotEmpty( $user->UUID, 'A user must have a UUID' );
     }
 }
  

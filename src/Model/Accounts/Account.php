@@ -35,21 +35,16 @@ class Account extends Model
     {
         $schema = new ModelSchema("tblAccount");
         $schema->addColumn(
-            new AutoIncrement("AccountID"),
+            new String("AccountID", 50),
             new ForeignKey("ServerID"),
             new String("AccountName", 50),
-            new String("UniqueReference", 50),
             new EncryptedString("CredentialsIV", 120)
         );
 
+        $schema->uniqueIdentifierColumnName = "AccountID";
         $schema->labelColumnName = "AccountName";
 
         return $schema;
-    }
-
-    public function invite(User $user)
-    {
-        $this->Invites->append($user);
     }
 
     protected function beforeSave()
@@ -74,7 +69,7 @@ class Account extends Model
 
             do {
                 $duped = false;
-                $list = Account::find(new Equals("UniqueReference", $reference));
+                $list = Account::find(new Equals("AccountID", $reference));
 
                 if (count($list) > 0) {
                     $dupeCount++;
@@ -85,7 +80,7 @@ class Account extends Model
                 }
             } while ($duped);
 
-            $this->UniqueReference = $reference;
+            $this->AccountID = $reference;
 
             // Build a CredentialsIV
             $credentialsIV = md5(mt_rand() . uniqid("", true));

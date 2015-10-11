@@ -20,7 +20,11 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\Model;
 
 use Rhubarb\Crown\Context;
 use Rhubarb\Crown\Exceptions\ImplementationException;
+use Rhubarb\Scaffolds\Saas\Landlord\Emails\InviteEmail;
+use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\User;
 use Rhubarb\Scaffolds\Saas\Landlord\SaasLandlordModule;
+use Rhubarb\Stem\Exceptions\RecordNotFoundException;
+use Rhubarb\Stem\Filters\Equals;
 use Rhubarb\Stem\Models\ModelEventManager;
 use Rhubarb\Stem\Repositories\MySql\MySql;
 use Rhubarb\Stem\Schema\SolutionSchema;
@@ -33,9 +37,9 @@ class SaasSolutionSchema extends SolutionSchema
         parent::__construct(0.12);
 
         $this->addModel("User", __NAMESPACE__ . '\Users\User');
+        $this->addModel("Invite", __NAMESPACE__ . '\Users\Invite');
         $this->addModel("Account", __NAMESPACE__ . '\Accounts\Account');
         $this->addModel("AccountUser", __NAMESPACE__ . '\Accounts\AccountUser');
-        $this->addModel("AccountInvite", __NAMESPACE__ . '\Accounts\AccountInvite');
         $this->addModel("Server", __NAMESPACE__ . '\Infrastructure\Server');
 
         ModelEventManager::attachEventHandler("Account", "AfterSave", function ($account) {
@@ -54,10 +58,10 @@ class SaasSolutionSchema extends SolutionSchema
                     $port
                 );
 
-                $password = sha1($account->UniqueReference . strrev($account->CredentialsIV));
+                $password = sha1($account->AccountID . strrev($account->CredentialsIV));
 
                 // Attempt to create the database for this account.
-                MySql::executeStatement("CREATE DATABASE IF NOT EXISTS `" . $account->UniqueReference . "`", [], $connection);
+                MySql::executeStatement("CREATE DATABASE IF NOT EXISTS `" . $account->AccountID . "`", [], $connection);
 
                 $tenantServers = array_merge(SaasLandlordModule::getTenantServerIPAddresses(), SaasLandlordModule::getTenantServerMasks());
                 if (count($tenantServers) === 0) {
@@ -66,10 +70,28 @@ class SaasSolutionSchema extends SolutionSchema
                 // grant for all tenant
                 foreach ($tenantServers as $tenantServer) {
                     MySql::executeStatement(
-                        "GRANT ALL ON `" . $account->UniqueReference . "`.* TO '" . $account->UniqueReference . "'@'" . $tenantServer . "' IDENTIFIED BY '" . $password . "'",
+                        "GRANT ALL ON `" . $account->AccountID . "`.* TO '" . $account->AccountID . "'@'" . $tenantServer . "' IDENTIFIED BY '" . $password . "'",
                         [], $connection);
                 }
             }
+        });
+
+        ModelEventManager::attachEventHandler("Invite", "BeforeSave", function ($invite) {
+            try {
+                $user = User::findFirst(new Equals('Email', $invite->Email));
+            } catch (RecordNotFoundException $ex) {
+                $user = new User();
+                $user->Enabled = false;
+                $user->Email = $invite->Email;
+                $user->save();
+            }
+
+            $invite->UserID = $user->UniqueIdentifier;
+        });
+
+        ModelEventManager::attachEventHandler("Invite", "AfterSave", function ($invite) {
+            $inviteEmail = new InviteEmail($invite);
+            $inviteEmail->send();
         });
     }
 
@@ -82,7 +104,16 @@ class SaasSolutionSchema extends SolutionSchema
                 "Server" =>
                     [
                         "Accounts" => "Account.ServerID"
-                    ]
+                    ],
+                "User" =>
+                    [
+                        "Invites" => "Invite.UserID"
+                    ],
+                "Account" =>
+                    [
+                        "Invites" => "Invite.AccountID"
+                    ],
+
             ]);
 
         $this->declareManyToManyRelationships(
@@ -90,7 +121,6 @@ class SaasSolutionSchema extends SolutionSchema
                 "Account" =>
                     [
                         "Users" => "AccountUser.AccountID_UserID.User:Accounts",
-                        "Invites" => "AccountInvite.AccountID_UserID.User:Invites"
                     ]
             ]);
     }

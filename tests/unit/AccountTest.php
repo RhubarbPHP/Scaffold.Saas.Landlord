@@ -20,35 +20,35 @@ class AccountTest extends SaasTestCase
     {
     }
 
-    public function testAccountGetsUniqueReference()
+    public function testAccountGetsAccountID()
     {
         $account = new Account();
         $account->AccountName = "Grass Mongers";
         $account->save();
 
-        $this->assertEquals("grass-mong", $account->UniqueReference);
+        $this->assertEquals("grass-mong", $account->AccountID);
 
         $account->save();
 
-        $this->assertEquals("grass-mong", $account->UniqueReference, "The unique reference shouldn't change.");
+        $this->assertEquals("grass-mong", $account->AccountID, "The unique reference shouldn't change.");
 
         $account = new Account();
         $account->AccountName = "Herb Mongers";
         $account->save();
 
-        $this->assertEquals("herb-monge", $account->UniqueReference);
+        $this->assertEquals("herb-monge", $account->AccountID);
 
         $account = new Account();
         $account->AccountName = "Herb Mongers";
         $account->save();
 
-        $this->assertEquals("herb-monge-2", $account->UniqueReference, "Similar accounts should stil have a unique reference");
+        $this->assertEquals("herb-monge-2", $account->AccountID, "Similar accounts should stil have a unique reference");
 
         $account = new Account();
         $account->AccountName = "Tra-;Sf=  $";
         $account->save();
 
-        $this->assertEquals("tra-sf", $account->UniqueReference);
+        $this->assertEquals("tra-sf", $account->AccountID);
     }
 
     public function testAccountGetsIV()
@@ -95,19 +95,5 @@ class AccountTest extends SaasTestCase
         $account->save();
 
         $this->assertEquals($firstServer, $account->ServerID, "Given our unit testing data - this account should have gone back to the first server.");
-    }
-
-    public function testInvites()
-    {
-        $user = new User();
-        $user->Username = "aasdfa";
-        $user->Forename = "Mary";
-        $user->setNewPassword("asdf");
-        $user->save();
-
-        $this->steelInc->invite($user);
-
-        $this->assertCount(1, $user->Invites);
-        $this->assertEquals($this->steelInc->UniqueIdentifier, $user->Invites[0]->AccountID);
     }
 }

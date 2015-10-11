@@ -21,6 +21,7 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts;
 use Rhubarb\Stem\Models\Model;
 use Rhubarb\Stem\Schema\Columns\AutoIncrement;
 use Rhubarb\Stem\Schema\Columns\ForeignKey;
+use Rhubarb\Stem\Schema\Columns\String;
 use Rhubarb\Stem\Schema\ModelSchema;
 
 class AccountUser extends Model
@@ -31,7 +32,7 @@ class AccountUser extends Model
 
         $schema->addColumn(
             new AutoIncrement("AccountUserID"),
-            new ForeignKey("AccountID"),
+            new String("AccountID", 16),
             new ForeignKey("UserID")
         );
 

@@ -18,6 +18,7 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\LoginProviders;
 
+use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\LoginProviders\Exceptions\LoginFailedException;
 use Rhubarb\Scaffolds\Authentication\LoginProvider;
 

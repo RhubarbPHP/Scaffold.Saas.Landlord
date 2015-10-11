@@ -33,6 +33,7 @@ use Rhubarb\RestApi\UrlHandlers\UnauthenticatedRestResourceHandler;
 use Rhubarb\Scaffolds\AuthenticationWithRoles\AuthenticationWithRolesModule;
 use Rhubarb\Scaffolds\NavigationMenu\NavigationMenuModule;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\ServerResource;
+use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users\InviteResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users\UserResource;
 use Rhubarb\Scaffolds\TokenBasedRestApi\TokenBasedRestApiModule;
 use Rhubarb\Stem\Schema\SolutionSchema;
@@ -88,7 +89,8 @@ class SaasLandlordModule extends Module
                     ], ["post"]),
                 "/accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource',
                     [
-                       "/users" => new RestCollectionHandler( UserResource::class, [], ["get", "post", "put" ] )
+                       "/users" => new RestCollectionHandler( UserResource::class, [], ["get", "post", "put" ] ),
+                        "/invites" => new RestCollectionHandler( InviteResource::class, [], ["get", "post", "put" ] )
                     ])
             ] );
 

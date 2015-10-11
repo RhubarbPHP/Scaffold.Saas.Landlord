@@ -43,5 +43,21 @@ class AccountResourceTest extends SaasApiTestCase
 
         $this->assertFalse($accounts->result->status, "You shouldn't be able to access this account!");
     }
+
+    public function testListOfConnectedUsers()
+    {
+        $users = $this->makeApiCall("/accounts/".$this->protonWelding->UniqueIdentifier."/users");
+
+        $this->assertCount(1, $users->items, "Proton welding only has 1 user!");
+        $this->assertEquals("nigel", $users->items[0]->Username);
+    }
+
+    public function testAccountIDedByReference()
+    {
+        $account = $this->makeApiCall("/accounts/proton-wel");
+
+        $this->assertEquals( 10, strlen($account->_id), "Accounts should be id'ed by their reference, not id");
+    }
+
 }
  
