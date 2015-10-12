@@ -41,4 +41,4 @@ class MeResource extends UserResource
 
         return $columns;
     }
-} 
+}
