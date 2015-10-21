@@ -26,17 +26,21 @@ class AccountTest extends SaasTestCase
         $account->AccountName = "Grass Mongers";
         $account->save();
 
-        $this->assertEquals("grass-mong", $account->AccountID);
+        $this->assertEquals("grass-mong-1", $account->AccountID);
+
+        // to minimise the risk of conflicts with url handler, ensure the last character is a number. You're unlikely to
+        // have a page /account/add-1, but a page /account/add create the need to ensure no account id is "add".
+        $this->assertRegExp("/\d$/", $account->AccountID, 'The last character of an account id should be a number');
 
         $account->save();
 
-        $this->assertEquals("grass-mong", $account->AccountID, "The unique reference shouldn't change.");
+        $this->assertEquals("grass-mong-1", $account->AccountID, "The unique reference shouldn't change.");
 
         $account = new Account();
         $account->AccountName = "Herb Mongers";
         $account->save();
 
-        $this->assertEquals("herb-monge", $account->AccountID);
+        $this->assertEquals("herb-monge-1", $account->AccountID);
 
         $account = new Account();
         $account->AccountName = "Herb Mongers";
@@ -48,7 +52,19 @@ class AccountTest extends SaasTestCase
         $account->AccountName = "Tra-;Sf=  $";
         $account->save();
 
-        $this->assertEquals("tra-sf", $account->AccountID);
+        $this->assertEquals("tra-sf-1", $account->AccountID);
+    }
+
+    public function testAccountGetsUniqueIDFromDuplicateReference()
+    {
+        $account1 = new Account();
+        $account1->AccountName = "Grass Mongers";
+        $account1->save();
+
+        $account2 = new Account();
+        $account2->AccountName = "Grass Mongers";
+        $account2->save();
+        $this->assertNotEquals($account1->AccountID, $account2->AccountID, "Account's should not have duplicate ids.");
     }
 
     public function testAccountGetsIV()

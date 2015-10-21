@@ -19,11 +19,9 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts;
 
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Infrastructure\Server;
-use Rhubarb\Scaffolds\Authentication\User;
 use Rhubarb\Stem\Aggregates\Count;
-use Rhubarb\Stem\Filters\Equals;
+use Rhubarb\Stem\Filters\StartsWith;
 use Rhubarb\Stem\Models\Model;
-use Rhubarb\Stem\Schema\Columns\AutoIncrement;
 use Rhubarb\Stem\Schema\Columns\EncryptedString;
 use Rhubarb\Stem\Schema\Columns\ForeignKey;
 use Rhubarb\Stem\Schema\Columns\String;
@@ -76,24 +74,8 @@ class Account extends Model
                 $baseReference = substr( $baseReference, 0, 10 );
             }
 
-            $reference = $baseReference;
-
-            $dupeCount = 1;
-
-            do {
-                $duped = false;
-                $list = Account::find(new Equals("AccountID", $reference));
-
-                if (count($list) > 0) {
-                    $dupeCount++;
-
-                    $reference = $baseReference . "-" . $dupeCount;
-
-                    $duped = true;
-                }
-            } while ($duped);
-
-            $this->AccountID = $reference;
+            $accountsWithBaseReference = (int)count(Account::find(new StartsWith('AccountID', $baseReference . '-'))) + 1;
+            $this->AccountID = $baseReference . '-' . $accountsWithBaseReference;
 
             // Build a CredentialsIV
             $credentialsIV = md5(mt_rand() . uniqid("", true));
