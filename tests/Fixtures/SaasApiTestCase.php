@@ -25,11 +25,12 @@ class SaasApiTestCase extends TokenAuthenticatedRestApiClientTestCase
 {
 	use SaasTestCaseTrait;
 
+	protected $username = "unit-tester";
+
 	protected function getUsername()
 	{
-		return "unit-tester";
+		return $this->username;
 	}
-
 	protected $password = "abc123";
 
 	protected function getPassword()
