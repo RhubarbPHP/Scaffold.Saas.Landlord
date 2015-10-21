@@ -1,6 +1,6 @@
 <?php
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users;
+namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources;
 
 use Rhubarb\RestApi\Resources\ModelRestResource;
 
@@ -21,15 +21,8 @@ class InviteResource extends ModelRestResource
         $columns = parent::getColumns();
         $columns[] = 'UserUUID';
         $columns[] = 'AccountID';
+        $columns[] = 'Accepted';
 
         return $columns;
     }
-
-    public function post($restResource)
-    {
-        $restResource['AccountID'] = $this->parentResource->getModel()->UniqueIdentifier;
-        return parent::post($restResource);
-    }
-
-
 }

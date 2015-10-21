@@ -32,8 +32,9 @@ use Rhubarb\RestApi\UrlHandlers\UnauthenticatedRestCollectionHandler;
 use Rhubarb\RestApi\UrlHandlers\UnauthenticatedRestResourceHandler;
 use Rhubarb\Scaffolds\AuthenticationWithRoles\AuthenticationWithRolesModule;
 use Rhubarb\Scaffolds\NavigationMenu\NavigationMenuModule;
+use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountInviteResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\ServerResource;
-use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users\InviteResource;
+use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users\UserInviteResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users\UserResource;
 use Rhubarb\Scaffolds\TokenBasedRestApi\TokenBasedRestApiModule;
 use Rhubarb\Stem\Schema\SolutionSchema;
@@ -81,7 +82,9 @@ class SaasLandlordModule extends Module
             [
                 "/users/me" => new RestResourceHandler(__NAMESPACE__ . '\RestResources\Users\MeResource',
                     [
-                        "/accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource')
+                        "/accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource'),
+                        // For users to manage their own invites
+                        "/invites" => new RestCollectionHandler(UserInviteResource::class, [], ["get", "put"])
                     ]),
                 "/users" => new UnauthenticatedRestCollectionHandler(__NAMESPACE__ . '\RestResources\Users\UserResource',
                     [
@@ -90,8 +93,9 @@ class SaasLandlordModule extends Module
                 "/accounts" => new RestCollectionHandler(__NAMESPACE__ . '\RestResources\Accounts\AccountResource',
                     [
                        "/users" => new RestCollectionHandler( UserResource::class, [], ["get", "post", "put" ] ),
-                        "/invites" => new RestCollectionHandler( InviteResource::class, [], ["get", "post", "put" ] )
-                    ])
+                        // For invite management on the tenant system
+                        "/invites" => new RestCollectionHandler( AccountInviteResource::class, [], ["get", "post", "put" ] )
+                    ]),
             ] );
 
         $rootApiUrl->setPriority(20);
