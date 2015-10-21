@@ -1,11 +1,17 @@
 <?php
 
 
+use Rhubarb\Crown\Email\EmailProvider;
+use Rhubarb\Crown\Email\SimpleEmail;
 use Rhubarb\Crown\Tests\Fixtures\UnitTestingEmailProvider;
 use Rhubarb\Scaffolds\Saas\Landlord\Emails\InviteEmail;
+use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\AccountUser;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\Invite;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\User;
 use Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures\SaasApiTestCase;
+use Rhubarb\Stem\Exceptions\RecordNotFoundException;
+use Rhubarb\Stem\Filters\AndGroup;
+use Rhubarb\Stem\Filters\Equals;
 
 class InviteResourceTest extends SaasApiTestCase
 {
@@ -38,6 +44,7 @@ class InviteResourceTest extends SaasApiTestCase
         $this->assertEquals( 'some@guy.com', $this->findLastUser()->Email, "Invited user's should match invite email" );
         $this->assertEquals( $this->findLastUser()->UUID, $invite->UserUUID, "No User UUID in invite response" );
 
+        /** @var InviteEmail $lastInviteEmail */
         $lastInviteEmail = UnitTestingEmailProvider::GetLastEmail();
 
         $this->assertInstanceOf( InviteEmail::class, $lastInviteEmail);
@@ -64,11 +71,59 @@ class InviteResourceTest extends SaasApiTestCase
 
     /**
      * @return \Rhubarb\Stem\Models\Model|static
-     * @throws \Rhubarb\Stem\Exceptions\RecordNotFoundException
+     * @throws RecordNotFoundException
      */
     public function findLastUser()
     {
         return User::findLast();
     }
 
+    public function testAcceptInvite()
+    {
+        $invite = new Invite();
+        $invite->UserID = $this->nigel->getUniqueIdentifier();
+        $invite->AccountID = $this->steelInc->getUniqueIdentifier();
+        $invite->save();
+
+        $originalUsername = $this->username;
+        $this->username = $this->nigel->Username;
+
+        // list this user's invites
+        $response = $this->MakeApiCall( "/users/me/invites/" );
+        $this->assertCount( 1, $response->items, 'must be able to list invites for this user.' );
+        $responseItem = $response->items[0];
+
+        $this->assertEquals($invite->UniqueIdentifier, $responseItem->_id, "Invite id should match");
+        $this->assertEquals($invite->AccountID, $responseItem->AccountID, 'Response invite should include account ID');
+
+        // Check that the last email
+        /** @var InviteEmail $firstInviteEmail */
+        $firstInvited = UnitTestingEmailProvider::GetLastEmail()->getRecipientList();
+
+        // Send another email
+        $email = new SimpleEmail();
+        $email->addRecipient( 'some@not.invite' );
+        $email->send();
+
+        // Accept the invite
+        $updateResponse = $this->MakeApiCall( "/users/me/invites/" . $invite->getUniqueIdentifier(), 'put', ['Accepted' => true] );
+
+        $this->assertTrue($updateResponse->result->status, 'Failed to PUT new accepted flag for invite');
+
+        $this->assertNotEquals($firstInvited, UnitTestingEmailProvider::GetLastEmail()->getRecipientList(), 'A second invite email should not be sent.');
+
+        try{
+            $accountUser = AccountUser::FindFirst( new AndGroup([
+                new Equals('AccountID', $invite->AccountID),
+                new Equals('UserID', $invite->UserID)
+            ]) );
+        }
+        catch( RecordNotFoundException $ex )
+        {
+            $accountUser = null;
+        }
+        $this->assertNotNull( $accountUser, 'No account-user link created for accepted invite' );
+
+        $this->username = $originalUsername;
+    }
 }

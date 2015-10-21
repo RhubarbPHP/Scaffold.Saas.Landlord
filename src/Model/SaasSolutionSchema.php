@@ -21,6 +21,7 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\Model;
 use Rhubarb\Crown\Context;
 use Rhubarb\Crown\Exceptions\ImplementationException;
 use Rhubarb\Scaffolds\Saas\Landlord\Emails\InviteEmail;
+use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\Invite;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\User;
 use Rhubarb\Scaffolds\Saas\Landlord\SaasLandlordModule;
 use Rhubarb\Stem\Exceptions\RecordNotFoundException;
@@ -76,22 +77,30 @@ class SaasSolutionSchema extends SolutionSchema
             }
         });
 
-        ModelEventManager::attachEventHandler("Invite", "BeforeSave", function ($invite) {
-            try {
-                $user = User::findFirst(new Equals('Email', $invite->Email));
-            } catch (RecordNotFoundException $ex) {
-                $user = new User();
-                $user->Enabled = false;
-                $user->Email = $invite->Email;
-                $user->save();
+        ModelEventManager::attachEventHandler("Invite", "BeforeSave", function (Invite $invite) {
+            if( $invite->isNewRecord() )
+            {
+                try {
+                    $user = User::findFirst(new Equals('Email', $invite->Email));
+                } catch (RecordNotFoundException $ex) {
+                    $user = new User();
+                    $user->Enabled = false;
+                    $user->Email = $invite->Email;
+                    $user->save();
+                }
+                $invite->UserID = $user->UniqueIdentifier;
             }
 
-            $invite->UserID = $user->UniqueIdentifier;
+            // Accept invites
+            if( $invite->Accepted && $invite->hasPropertyChanged( 'Accepted' ) )
+            {
+                $invite->Account->Users->append( $invite->User );
+            }
+
         });
 
-        ModelEventManager::attachEventHandler("Invite", "AfterSave", function ($invite) {
-            $inviteEmail = new InviteEmail($invite);
-            $inviteEmail->send();
+        ModelEventManager::attachEventHandler("Invite", "AfterSave", function (Invite $invite) {
+            $invite->send();
         });
     }
 
