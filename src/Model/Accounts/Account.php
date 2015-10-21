@@ -29,6 +29,19 @@ use Rhubarb\Stem\Schema\Columns\ForeignKey;
 use Rhubarb\Stem\Schema\Columns\String;
 use Rhubarb\Stem\Schema\ModelSchema;
 
+/**
+ * A Tenant Account.
+ *
+ * Tenants usually rely on the landlord to provide them with user authentication, database
+ * credentials, and certain security-sensitive operations.
+ *
+ * @package Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts
+ *
+ * @property string $AccountID
+ * @property int $ServerID
+ * @property string $AccountName
+ * @property string $CredentialsIV
+ */
 class Account extends Model
 {
     public function createSchema()
