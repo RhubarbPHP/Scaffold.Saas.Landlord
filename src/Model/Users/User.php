@@ -23,6 +23,13 @@ use Rhubarb\Stem\Schema\Columns\Boolean;
 use Rhubarb\Stem\Schema\Columns\UUID;
 use Rhubarb\Stem\Schema\ModelSchema;
 
+/**
+ * Class User
+ * @package Rhubarb\Scaffolds\Saas\Landlord\Model\Users
+ *
+ * @property bool $LandlordUser
+ * @property string $UUID
+ */
 class User extends \Rhubarb\Scaffolds\AuthenticationWithRoles\User
 {
     protected function extendSchema(ModelSchema $schema)
@@ -41,5 +48,16 @@ class User extends \Rhubarb\Scaffolds\AuthenticationWithRoles\User
     public static function findLandlordUsers()
     {
         return self::find(new Equals("LandlordUser", true));
+    }
+
+    protected function getPublicPropertyList()
+    {
+        return [
+            'UUID',
+            'Forename',
+            'Surname',
+            'Username',
+            'Email'
+        ];
     }
 } 

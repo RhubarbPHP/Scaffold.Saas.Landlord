@@ -48,6 +48,12 @@ class AccountUser extends Model
 
         return $schema;
     }
+
+    protected function beforeDelete()
+    {
+        $this->Account->detachUser( $this->User );
+    }
+
     public static function updateUserOnAllAccounts(User $user)
     {
         $accountUsers = self::find( new Equals( 'UserID', $user->UserID ) );

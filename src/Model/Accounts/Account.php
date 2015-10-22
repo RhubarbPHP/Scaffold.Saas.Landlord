@@ -20,12 +20,15 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts;
 
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Infrastructure\Server;
 use Rhubarb\Stem\Aggregates\Count;
+use Rhubarb\Stem\Collections\Collection;
 use Rhubarb\Stem\Filters\StartsWith;
 use Rhubarb\Stem\Models\Model;
 use Rhubarb\Stem\Schema\Columns\EncryptedString;
 use Rhubarb\Stem\Schema\Columns\ForeignKey;
 use Rhubarb\Stem\Schema\Columns\String;
 use Rhubarb\Stem\Schema\ModelSchema;
+use RightRevenue\Landlord\Models\Users\User;
+use RightRevenue\Landlord\RestClients\TenantGateway;
 
 /**
  * A Tenant Account.
@@ -39,6 +42,8 @@ use Rhubarb\Stem\Schema\ModelSchema;
  * @property int $ServerID
  * @property string $AccountName
  * @property string $CredentialsIV
+ *
+ * @property User[]|Collection $Users
  */
 class Account extends Model
 {
@@ -95,5 +100,22 @@ class Account extends Model
         $servers->addSort("CountOfAccountsAccountID", true);
 
         return $servers[0]->UniqueIdentifier;
+    }
+
+    public function attachUserWithRole(User $user, $tenantRoleID)
+    {
+        $this->attachUser($user, ['RoleID' => $tenantRoleID]);
+    }
+
+    public function attachUser(User $user, $additionalTenantUserProperties = [])
+    {
+        $this->Users->append($user);
+
+        $response = TenantGateway::createUser($this, $user, $additionalTenantUserProperties);
+    }
+
+    public function detachUser(User $user)
+    {
+        TenantGateway::deleteUser($this, $user);
     }
 }
