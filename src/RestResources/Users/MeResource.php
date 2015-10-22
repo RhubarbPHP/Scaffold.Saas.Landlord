@@ -19,6 +19,7 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users;
 
 use Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider;
+use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\AccountUser;
 
 class MeResource extends UserResource
 {
@@ -41,4 +42,13 @@ class MeResource extends UserResource
 
         return $columns;
     }
+
+    protected function afterModelUpdated($model, $restResource)
+    {
+        parent::afterModelUpdated($model, $restResource);
+
+        AccountUser::updateUserOnAllAccounts($model);
+    }
+
+
 }

@@ -18,12 +18,22 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts;
 
+use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\User;
+use Rhubarb\Stem\Filters\Equals;
 use Rhubarb\Stem\Models\Model;
 use Rhubarb\Stem\Schema\Columns\AutoIncrement;
 use Rhubarb\Stem\Schema\Columns\ForeignKey;
 use Rhubarb\Stem\Schema\Columns\String;
 use Rhubarb\Stem\Schema\ModelSchema;
+use RightRevenue\Landlord\RestClients\TenantGateway;
 
+/**
+ * Class AccountUser
+ * @package Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts
+ *
+ * @property Account $Account
+ * @property User $User
+ */
 class AccountUser extends Model
 {
     public function createSchema()
@@ -37,5 +47,14 @@ class AccountUser extends Model
         );
 
         return $schema;
+    }
+    public static function updateUserOnAllAccounts(User $user)
+    {
+        $accountUsers = self::find( new Equals( 'UserID', $user->UserID ) );
+
+        foreach( $accountUsers as $accountUser )
+        {
+            TenantGateway::updateUser($accountUser->Account, $user);
+        }
     }
 }
