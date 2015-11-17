@@ -43,7 +43,7 @@ class Invite extends Model
             new UUID("InviteID"),
             new String("Email", 150),
             new ForeignKey("UserID"),
-            new ForeignKey("AccountID"),
+            new String("AccountID", 50),
             new Boolean("Accepted", false),
             new Boolean("Sent", false),
             new DateTime("SentDate")

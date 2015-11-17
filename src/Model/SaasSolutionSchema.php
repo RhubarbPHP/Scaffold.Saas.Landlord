@@ -35,7 +35,7 @@ class SaasSolutionSchema extends SolutionSchema
 {
     public function __construct()
     {
-        parent::__construct(0.12);
+        parent::__construct(0.13);
 
         $this->addModel("User", __NAMESPACE__ . '\Users\User');
         $this->addModel("Invite", __NAMESPACE__ . '\Users\Invite');
