@@ -17,6 +17,7 @@ class AccountInviteResource extends InviteResource
     public function post($restResource)
     {
         $restResource['AccountID'] = $this->parentResource->getModel()->UniqueIdentifier;
+
         return parent::post($restResource);
     }
 

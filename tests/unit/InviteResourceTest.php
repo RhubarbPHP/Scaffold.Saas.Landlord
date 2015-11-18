@@ -60,6 +60,8 @@ class InviteResourceTest extends SaasApiTestCase
         $user->NewPassword = "abc123";
         $user->save();
 
+        $countOfInvites = count(Invite::find());
+
         $invite = $this->makeApiCall(
             "/accounts/".$this->protonWelding->UniqueIdentifier."/invites",
             'post',
@@ -67,7 +69,52 @@ class InviteResourceTest extends SaasApiTestCase
         );
 
         $this->assertEquals($user->UUID, $invite->UserUUID, "A new user should not have been created");
+        $this->assertCount($countOfInvites + 1, Invite::find(), "An invitation should have been created");
     }
+
+    public function testDoubleInvite()
+    {
+        $this->makeApiCall(
+            "/accounts/".$this->protonWelding->UniqueIdentifier."/invites",
+            'post',
+            [ 'Email' => 'billybob@abc123.com' ]
+        );
+
+        $lastEmail = UnitTestingEmailProvider::GetLastEmail();
+
+        $this->makeApiCall(
+            "/accounts/".$this->protonWelding->UniqueIdentifier."/invites",
+            'post',
+            [ 'Email' => 'billybob@abc123.com' ]
+        );
+
+        $newEmail = UnitTestingEmailProvider::GetLastEmail();
+
+        $this->assertNotSame($lastEmail, $newEmail, "An invitation should have been sent however.");
+    }
+
+    public function testNewInviteForExistingUserAlreadyInTheAccount()
+    {
+        $user = new User();
+        $user->Username = "billybob";
+        $user->Forename = "Billy";
+        $user->Email = "billybob@abc123.com";
+        $user->NewPassword = "abc123";
+        $user->save();
+
+        $countOfInvites = count(Invite::find());
+
+        $this->protonWelding->attachUser($user);
+
+        $invite = $this->makeApiCall(
+            "/accounts/".$this->protonWelding->UniqueIdentifier."/invites",
+            'post',
+            [ 'Email' => 'billybob@abc123.com' ]
+        );
+
+        $this->assertCount($countOfInvites, Invite::find(), "An invitation should have been created");
+    }
+
 
     /**
      * @return \Rhubarb\Stem\Models\Model|static

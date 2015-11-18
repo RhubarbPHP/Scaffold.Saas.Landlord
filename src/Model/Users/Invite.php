@@ -5,6 +5,8 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\Model\Users;
 use Rhubarb\Scaffolds\Saas\Landlord\Emails\InviteEmail;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\Account;
 use Rhubarb\Stem\Exceptions\ModelConsistencyValidationException;
+use Rhubarb\Stem\Filters\AndGroup;
+use Rhubarb\Stem\Filters\Equals;
 use Rhubarb\Stem\Models\Model;
 use Rhubarb\Stem\Schema\Columns\Boolean;
 use Rhubarb\Stem\Schema\Columns\DateTime;
@@ -54,6 +56,16 @@ class Invite extends Model
         return $schema;
     }
 
+    public static function fromEmailAndAccountID($email, $accountId)
+    {
+        return self::findFirst( new AndGroup(
+            [
+                new Equals("Email", $email),
+                new Equals("AccountID", $accountId)
+            ]
+        ));
+    }
+
     public function getUserUUID()
     {
         return $this->User->UUID;
@@ -68,9 +80,9 @@ class Invite extends Model
         }
     }
 
-    public function send()
+    public function send($resend = false)
     {
-        if (!$this->Sent) {
+        if (!$this->Sent || $resend) {
             $inviteEmail = new InviteEmail($this);
             $inviteEmail->send();
             $this->SentDate = new \DateTime();

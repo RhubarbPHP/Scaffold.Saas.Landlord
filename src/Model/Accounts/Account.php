@@ -27,8 +27,7 @@ use Rhubarb\Stem\Schema\Columns\EncryptedString;
 use Rhubarb\Stem\Schema\Columns\ForeignKey;
 use Rhubarb\Stem\Schema\Columns\String;
 use Rhubarb\Stem\Schema\ModelSchema;
-use RightRevenue\Landlord\Models\Users\User;
-use RightRevenue\Landlord\RestClients\TenantGateway;
+use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\User;
 
 /**
  * A Tenant Account.
@@ -111,11 +110,11 @@ class Account extends Model
     {
         $this->Users->append($user);
 
-        $response = TenantGateway::createUser($this, $user, $additionalTenantUserProperties);
+        //$response = TenantGateway::createUser($this, $user, $additionalTenantUserProperties);
     }
 
     public function detachUser(User $user)
     {
-        TenantGateway::deleteUser($this, $user);
+        //TenantGateway::deleteUser($this, $user);
     }
 }
