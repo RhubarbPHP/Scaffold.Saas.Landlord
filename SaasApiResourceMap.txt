@@ -7,6 +7,8 @@
 
 /api/users/me/accounts                          GET to retrieve list of user accounts
 /api/users/me/invites                           GET to retrieve list of invites to other accounts
+/api/users/me/invites?invitation={InviteID}     GET to retrieve list of invites to other accounts AND attach the
+                                                specified invite to this user first.
 /api/users/me/invites/{InviteID}                GET/PUT retrieve or update invites
 
 /api/accounts                                   POST to register a new account

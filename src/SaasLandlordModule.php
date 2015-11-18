@@ -33,6 +33,7 @@ use Rhubarb\RestApi\UrlHandlers\UnauthenticatedRestResourceHandler;
 use Rhubarb\Scaffolds\AuthenticationWithRoles\AuthenticationWithRolesModule;
 use Rhubarb\Scaffolds\NavigationMenu\NavigationMenuModule;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountInviteResource;
+use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\ServerResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users\UserInviteResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users\UserResource;
@@ -77,6 +78,7 @@ class SaasLandlordModule extends Module
         parent::registerUrlHandlers();
 
         ModelRestResource::registerModelToResourceMapping("Server", ServerResource::class );
+        ModelRestResource::registerModelToResourceMapping("Account", AccountResource::class );
 
         $rootApiUrl = new RestApiRootHandler( ApiDescriptionResource::class,
             [

@@ -66,6 +66,7 @@ class InviteResource extends ModelRestResource
     protected function getColumns()
     {
         $columns = parent::getColumns();
+        $columns[] = 'Account:summary';
         $columns[] = 'UserUUID';
         $columns[] = 'AccountID';
         $columns[] = 'Accepted';

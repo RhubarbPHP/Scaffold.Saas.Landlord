@@ -94,7 +94,7 @@ class SaasSolutionSchema extends SolutionSchema
             // Accept invites
             if( $invite->Accepted && $invite->hasPropertyChanged( 'Accepted' ) )
             {
-                $invite->Account->Users->append( $invite->User );
+                $invite->Account->attachUser($invite->User);
             }
 
         });

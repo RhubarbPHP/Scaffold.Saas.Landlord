@@ -18,7 +18,7 @@ class UserResourceTest extends SaasApiTestCase
             "Forename" => "aaa",
             "NewPassword" => "ccc",
             "Email" => "wer@wer.com",
-            "InviteUUID" => $invite->UniqueIdentifier
+            "InviteID" => $invite->UniqueIdentifier
         ]);
 
         $user = User::findLast();

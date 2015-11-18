@@ -21,6 +21,7 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Infrastructure\Server;
 use Rhubarb\Stem\Aggregates\Count;
 use Rhubarb\Stem\Collections\Collection;
+use Rhubarb\Stem\Filters\Equals;
 use Rhubarb\Stem\Filters\StartsWith;
 use Rhubarb\Stem\Models\Model;
 use Rhubarb\Stem\Schema\Columns\EncryptedString;
@@ -108,7 +109,13 @@ class Account extends Model
 
     public function attachUser(User $user, $additionalTenantUserProperties = [])
     {
-        $this->Users->append($user);
+        // Check we're not already attached - in case multiple invitations to the same account are
+        // accepted and the tenant doesn't handle it well.
+        $users = $this->Users;
+
+        if (!$users->containsUniqueIdentifier($user->UniqueIdentifier)) {
+            $this->Users->append($user);
+        }
 
         //$response = TenantGateway::createUser($this, $user, $additionalTenantUserProperties);
     }

@@ -71,13 +71,15 @@ class Invite extends Model
         return $this->User->UUID;
     }
 
-    public function setAccepted($value)
+    public function accept()
     {
-        if (!$value && isset($this->modelData['Accepted']) && $this->modelData['Accepted']) {
-            throw new ModelConsistencyValidationException();
-        } else {
-            $this->modelData['Accepted'] = $value;
-        }
+        $this->Account->attachUser($this->User);
+
+        $this->User->Enabled = true;
+        $this->User->save();
+
+        $this->Accepted = true;
+        $this->save();
     }
 
     public function send($resend = false)

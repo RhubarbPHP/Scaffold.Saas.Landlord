@@ -100,27 +100,14 @@ class UserResource extends ModelRestResource
 
     public function post($restResource)
     {
-        if( isset( $restResource[ 'InviteUUID' ] ) )
+        if(isset($restResource['InviteID']))
         {
-            $invite = new Invite( $restResource[ 'InviteUUID' ] );
-            $account = $invite->Account;
-            $user = $invite->User;
-            try{
-                AccountUser::findFirst(new AndGroup([
-                    new Equals('AccountID', $account->AccountID),
-                    new Equals('UserID', $user->UserID)
-                ]));
-            }
-            catch( RecordNotFoundException $ex )
-            {
-                $accountUser = new AccountUser();
-                $accountUser->AccountID = $account->AccountID;
-                $accountUser->UserID = $user->UserID;
-                $accountUser->save();
-            }
-
-            $this->setModel( $user );
+            $invite = new Invite( $restResource[ 'InviteID' ] );
+            $this->setModel( $invite->User );
             $this->put($restResource);
+
+            $invite->accept();
+
             return $this->get();
         }
         else

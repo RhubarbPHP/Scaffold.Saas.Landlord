@@ -37,7 +37,7 @@ class InviteEmail extends TemplateEmail
     {
         $landlordSettings = new LandlordSettings();
 
-        $rd = base64_encode("/app/accounts/");
+        $rd = base64_encode("/app/accounts/?i={$this->invite->InviteID}");
 
         return <<<END
 <p>You've been invited to join us!</p>
