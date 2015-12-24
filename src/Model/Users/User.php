@@ -19,8 +19,8 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\Model\Users;
 
 use Rhubarb\Stem\Filters\Equals;
-use Rhubarb\Stem\Schema\Columns\Boolean;
-use Rhubarb\Stem\Schema\Columns\UUID;
+use Rhubarb\Stem\Schema\Columns\BooleanColumn;
+use Rhubarb\Stem\Schema\Columns\UUIDColumn;
 use Rhubarb\Stem\Schema\ModelSchema;
 
 /**
@@ -34,8 +34,8 @@ class User extends \Rhubarb\Scaffolds\AuthenticationWithRoles\User
 {
     protected function extendSchema(ModelSchema $schema)
     {
-        $schema->addColumn(new Boolean("LandlordUser", false));
-        $schema->addColumn(new UUID());
+        $schema->addColumn(new BooleanColumn("LandlordUser", false));
+        $schema->addColumn(new UUIDColumn());
 
         parent::extendSchema($schema);
     }

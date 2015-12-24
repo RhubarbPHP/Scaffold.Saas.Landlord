@@ -8,11 +8,11 @@ use Rhubarb\Stem\Exceptions\ModelConsistencyValidationException;
 use Rhubarb\Stem\Filters\AndGroup;
 use Rhubarb\Stem\Filters\Equals;
 use Rhubarb\Stem\Models\Model;
-use Rhubarb\Stem\Schema\Columns\Boolean;
-use Rhubarb\Stem\Schema\Columns\DateTime;
-use Rhubarb\Stem\Schema\Columns\ForeignKey;
-use Rhubarb\Stem\Schema\Columns\String;
-use Rhubarb\Stem\Schema\Columns\UUID;
+use Rhubarb\Stem\Schema\Columns\BooleanColumn;
+use Rhubarb\Stem\Schema\Columns\DateTimeColumn;
+use Rhubarb\Stem\Schema\Columns\ForeignKeyColumn;
+use Rhubarb\Stem\Schema\Columns\StringColumn;
+use Rhubarb\Stem\Schema\Columns\UUIDColumn;
 use Rhubarb\Stem\Schema\ModelSchema;
 
 /**
@@ -42,13 +42,13 @@ class Invite extends Model
     {
         $schema = new ModelSchema("tblInvite");
         $schema->addColumn(
-            new UUID("InviteID"),
-            new String("Email", 150),
-            new ForeignKey("UserID"),
-            new String("AccountID", 50),
-            new Boolean("Accepted", false),
-            new Boolean("Sent", false),
-            new DateTime("SentDate")
+            new UUIDColumn("InviteID"),
+            new StringColumn("Email", 150),
+            new ForeignKeyColumn("UserID"),
+            new StringColumn("AccountID", 50),
+            new BooleanColumn("Accepted", false),
+            new BooleanColumn("Sent", false),
+            new DateTimeColumn("SentDate")
         );
 
         $schema->uniqueIdentifierColumnName = 'InviteID';

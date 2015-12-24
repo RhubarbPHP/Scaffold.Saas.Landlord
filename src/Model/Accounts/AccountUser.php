@@ -21,11 +21,10 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\User;
 use Rhubarb\Stem\Filters\Equals;
 use Rhubarb\Stem\Models\Model;
-use Rhubarb\Stem\Schema\Columns\AutoIncrement;
-use Rhubarb\Stem\Schema\Columns\ForeignKey;
-use Rhubarb\Stem\Schema\Columns\String;
+use Rhubarb\Stem\Schema\Columns\AutoIncrementColumn;
+use Rhubarb\Stem\Schema\Columns\ForeignKeyColumn;
+use Rhubarb\Stem\Schema\Columns\StringColumn;
 use Rhubarb\Stem\Schema\ModelSchema;
-use RightRevenue\Landlord\RestClients\TenantGateway;
 
 /**
  * Class AccountUser
@@ -41,9 +40,9 @@ class AccountUser extends Model
         $schema = new ModelSchema("tblAccountUser");
 
         $schema->addColumn(
-            new AutoIncrement("AccountUserID"),
-            new String("AccountID", 16),
-            new ForeignKey("UserID")
+            new AutoIncrementColumn("AccountUserID"),
+            new StringColumn("AccountID", 16),
+            new ForeignKeyColumn("UserID")
         );
 
         return $schema;
@@ -60,7 +59,7 @@ class AccountUser extends Model
 
         foreach( $accountUsers as $accountUser )
         {
-            TenantGateway::updateUser($accountUser->Account, $user);
+            //TenantGateway::updateUser($accountUser->Account, $user);
         }
     }
 }

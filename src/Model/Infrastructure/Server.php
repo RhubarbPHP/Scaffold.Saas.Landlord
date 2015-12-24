@@ -19,9 +19,9 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\Model\Infrastructure;
 
 use Rhubarb\Stem\Models\Model;
-use Rhubarb\Stem\Schema\Columns\AutoIncrement;
-use Rhubarb\Stem\Schema\Columns\EncryptedString;
-use Rhubarb\Stem\Schema\Columns\String;
+use Rhubarb\Stem\Schema\Columns\AutoIncrementColumn;
+use Rhubarb\Stem\Schema\Columns\EncryptedStringColumn;
+use Rhubarb\Stem\Schema\Columns\StringColumn;
 use Rhubarb\Stem\Schema\ModelSchema;
 
 class Server extends Model
@@ -35,10 +35,10 @@ class Server extends Model
     {
         $schema = new ModelSchema("tblServer");
         $schema->addColumn(
-            new AutoIncrement("ServerID"),
-            new String("ServerName", 50),
-            new EncryptedString("Host", 80),
-            new EncryptedString("Port", 25)
+            new AutoIncrementColumn("ServerID"),
+            new StringColumn("ServerName", 50),
+            new EncryptedStringColumn("Host", 80),
+            new EncryptedStringColumn("Port", 25)
         );
 
         $schema->labelColumnName = "ServerName";

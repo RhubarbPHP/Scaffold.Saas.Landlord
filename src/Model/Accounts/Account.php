@@ -24,9 +24,9 @@ use Rhubarb\Stem\Collections\Collection;
 use Rhubarb\Stem\Filters\Equals;
 use Rhubarb\Stem\Filters\StartsWith;
 use Rhubarb\Stem\Models\Model;
-use Rhubarb\Stem\Schema\Columns\EncryptedString;
-use Rhubarb\Stem\Schema\Columns\ForeignKey;
-use Rhubarb\Stem\Schema\Columns\String;
+use Rhubarb\Stem\Schema\Columns\EncryptedStringColumn;
+use Rhubarb\Stem\Schema\Columns\ForeignKeyColumn;
+use Rhubarb\Stem\Schema\Columns\StringColumn;
 use Rhubarb\Stem\Schema\ModelSchema;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\User;
 
@@ -51,10 +51,10 @@ class Account extends Model
     {
         $schema = new ModelSchema("tblAccount");
         $schema->addColumn(
-            new String("AccountID", 50),
-            new ForeignKey("ServerID"),
-            new String("AccountName", 50),
-            new EncryptedString("CredentialsIV", 120)
+            new StringColumn("AccountID", 50),
+            new ForeignKeyColumn("ServerID"),
+            new StringColumn("AccountName", 50),
+            new EncryptedStringColumn("CredentialsIV", 120)
         );
 
         $schema->uniqueIdentifierColumnName = "AccountID";
