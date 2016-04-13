@@ -18,6 +18,7 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders;
 
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Stem\Models\Model;
 use Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider;
 use Rhubarb\Scaffolds\TokenBasedRestApi;
@@ -26,7 +27,7 @@ class TokenBasedAuthenticationProvider extends TokenBasedRestApi\Authentication\
 {
 	protected function logUserIn(Model $user)
 	{
-		$loginProvider = new SaasLoginProvider();
+		$loginProvider = Container::singleton(SaasLoginProvider::class);
 		$loginProvider->forceLogin( $user );
 	}
 }

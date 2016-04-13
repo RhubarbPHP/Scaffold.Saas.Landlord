@@ -18,9 +18,8 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\Model;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Application;
 use Rhubarb\Crown\Exceptions\ImplementationException;
-use Rhubarb\Scaffolds\Saas\Landlord\Emails\InviteEmail;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\Invite;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\User;
 use Rhubarb\Scaffolds\Saas\Landlord\SaasLandlordModule;
@@ -44,11 +43,9 @@ class SaasSolutionSchema extends SolutionSchema
         $this->addModel("Server", __NAMESPACE__ . '\Infrastructure\Server');
 
         ModelEventManager::attachEventHandler("Account", "AfterSave", function ($account) {
-            $modellingSettings = new StemSettings();
+            $modellingSettings = StemSettings::singleton();
 
-            $context = new Context();
-
-            if (!$context->UnitTesting) {
+            if (!Application::current()->unitTesting) {
                 $host = $account->Server->Host;
                 $port = $account->Server->Port;
 

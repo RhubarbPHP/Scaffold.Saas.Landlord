@@ -2,7 +2,7 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users;
 
-use Rhubarb\Crown\Context;
+use Rhubarb\Crown\Request\Request;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\Invite;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\User;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\InviteResource;
@@ -18,7 +18,7 @@ class UserInviteResource extends InviteResource
         $user = $this->getUser();
 
         // See if an invitation code is being redeemed.
-        $invitationCode = Context::currentRequest()->get("invitation");
+        $invitationCode = Request::current()->get("invitation");
 
         if ($invitationCode){
             $invitation = new Invite($invitationCode);

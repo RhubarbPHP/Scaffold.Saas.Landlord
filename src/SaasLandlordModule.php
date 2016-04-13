@@ -32,6 +32,10 @@ use Rhubarb\RestApi\UrlHandlers\UnauthenticatedRestCollectionHandler;
 use Rhubarb\RestApi\UrlHandlers\UnauthenticatedRestResourceHandler;
 use Rhubarb\Scaffolds\AuthenticationWithRoles\AuthenticationWithRolesModule;
 use Rhubarb\Scaffolds\NavigationMenu\NavigationMenuModule;
+use Rhubarb\Scaffolds\Saas\Landlord\Layouts\LandlordLayout;
+use Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\LandlordLoginProvider;
+use Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders\CredentialsAuthenticationProvider;
+use Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders\TokenBasedAuthenticationProvider;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountInviteResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\ServerResource;
@@ -47,30 +51,29 @@ class SaasLandlordModule extends Module
     public function __construct($apiStubUrl = "/api")
     {
         $this->apiStubUrl = $apiStubUrl;
+
+        parent::__construct();
     }
 
     protected function initialise()
     {
         SolutionSchema::registerSchema("SaasSchema", __NAMESPACE__ . "\Model\SaasSolutionSchema");
 
-        EncryptionProvider::setEncryptionProviderClassName('\Rhubarb\Scaffolds\Saas\Landlord\EncryptionProviders\SaasAes256EncryptionProvider');
+        EncryptionProvider::setProviderClassName('\Rhubarb\Scaffolds\Saas\Landlord\EncryptionProviders\SaasAes256EncryptionProvider');
 
         parent::initialise();
     }
 
-    protected function registerDependantModules()
+    protected function getModules()
     {
-        parent::registerDependantModules();
-
-        Module::registerModule(new LayoutModule('\Rhubarb\Scaffolds\Saas\Landlord\Layouts\LandlordLayout'));
-        Module::registerModule(new NavigationMenuModule());
-
-        Module::registerModule(new AuthenticationWithRolesModule('\Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\LandlordLoginProvider'));
-
-        Module::registerModule(new TokenBasedRestApiModule(
-            '\Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders\CredentialsAuthenticationProvider',
-            '\Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders\TokenBasedAuthenticationProvider'
-        ));
+        return [
+            new LayoutModule(LandlordLayout::class),
+            new NavigationMenuModule(),
+            new AuthenticationWithRolesModule(LandlordLoginProvider::class),
+            new TokenBasedRestApiModule(
+            CredentialsAuthenticationProvider::class,
+            TokenBasedAuthenticationProvider::class
+        )];
     }
 
     protected function registerUrlHandlers()

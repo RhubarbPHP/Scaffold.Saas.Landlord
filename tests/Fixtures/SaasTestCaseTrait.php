@@ -18,12 +18,11 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\Tests\Fixtures;
 
-use Rhubarb\Crown\Context;
-use Rhubarb\Crown\Email\EmailProvider;
-use Rhubarb\Crown\Email\PhpMailEmailProvider;
 use Rhubarb\Crown\Encryption\HashProvider;
 use Rhubarb\Crown\Http\HttpClient;
 use Rhubarb\Crown\Layout\LayoutModule;
+use Rhubarb\Crown\Request\Request;
+use Rhubarb\Crown\Sendables\Email\EmailProvider;
 use Rhubarb\Crown\Tests\Fixtures\UnitTestingEmailProvider;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\User;
 use Rhubarb\Stem\Models\Model;
@@ -68,13 +67,13 @@ trait SaasTestCaseTrait
 		$context = new Context();
 		$context->UnitTesting = true;
 
-		$request = Context::currentRequest();
+		$request = Request::current();
 		$request->reset();
 
-		HashProvider::setHashProviderClassName( "\Rhubarb\Crown\Encryption\Sha512HashProvider" );
+		HashProvider::setProviderClassName( "\Rhubarb\Crown\Encryption\Sha512HashProvider" );
 
 		// Make sure HTTP requests go the unit testing route.
-		HttpClient::setDefaultHttpClientClassName( '\Rhubarb\Crown\Tests\Fixtures\UnitTestingHttpClient' );
+		HttpClient::setProviderClassName( '\Rhubarb\Crown\Tests\Fixtures\UnitTestingHttpClient' );
 
 		EmailProvider::setDefaultEmailProviderClassName( UnitTestingEmailProvider::class );
 	}

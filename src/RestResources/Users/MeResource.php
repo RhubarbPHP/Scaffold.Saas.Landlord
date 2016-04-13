@@ -18,6 +18,7 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users;
 
+use Rhubarb\Crown\DependencyInjection\Container;
 use Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\AccountUser;
 
@@ -29,7 +30,7 @@ class MeResource extends UserResource
 
         // If the user is authenticated we can simply get the logged in model. Otherwise this
         // will throw an exception.
-        $login = new SaasLoginProvider();
+        $login = Container::singleton(SaasLoginProvider::class);
         $this->model = $login->getModel();
 
         $this->_id = $this->model->UniqueIdentifier;

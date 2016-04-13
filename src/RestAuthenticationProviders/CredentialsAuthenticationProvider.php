@@ -19,11 +19,12 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders;
 
 use Rhubarb\RestApi\Authentication\ModelLoginProviderAuthenticationProvider;
+use Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider;
 
 class CredentialsAuthenticationProvider extends ModelLoginProviderAuthenticationProvider
 {
 	protected function getLoginProviderClassName()
 	{
-		return "\Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider";
+		return SaasLoginProvider::class;
 	}
 }
