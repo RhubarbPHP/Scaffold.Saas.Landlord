@@ -19,7 +19,7 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\LoginProviders;
 
 use Rhubarb\Crown\LoginProviders\Exceptions\LoginFailedException;
-use Rhubarb\Scaffolds\Authentication\LoginProvider;
+use Rhubarb\Scaffolds\Authentication\LoginProviders\LoginProvider;
 
 /**
  * The login provider to control authentication of users to the landlord admin system itself.

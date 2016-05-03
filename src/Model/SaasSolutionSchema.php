@@ -51,8 +51,8 @@ class SaasSolutionSchema extends SolutionSchema
 
                 $connection = MySql::getManualConnection(
                     $host,
-                    $modellingSettings->Username,
-                    $modellingSettings->Password,
+                    $modellingSettings->username,
+                    $modellingSettings->password,
                     $port
                 );
 

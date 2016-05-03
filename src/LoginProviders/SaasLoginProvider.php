@@ -20,7 +20,7 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\LoginProviders;
 
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\LoginProviders\Exceptions\LoginFailedException;
-use Rhubarb\Scaffolds\Authentication\LoginProvider;
+use Rhubarb\Scaffolds\Authentication\LoginProviders\LoginProvider;
 
 /**
  * The login provider used to serve tenant authentication requests.
