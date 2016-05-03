@@ -18,12 +18,26 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Accounts;
 
-use Rhubarb\Patterns\Mvp\Crud\ModelForm\ModelFormPresenter;
+use Rhubarb\Patterns\Mvp\Crud\CrudView;
 
-class AccountsItemPresenter extends ModelFormPresenter
+class AccountsItemView extends CrudView
 {
-    protected function createView()
+    protected function createSubLeaves()
     {
-        return new AccountsItemView();
+        parent::createPresenters();
+
+        $this->registerSubLeaf(
+            "AccountName"
+        );
+    }
+
+
+    protected function printViewContent()
+    {
+        $this->layoutItemsWithContainer("",
+            [
+                "AccountName",
+                "" => "{Save} {Cancel}"
+            ]);
     }
 }

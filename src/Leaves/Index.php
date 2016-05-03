@@ -16,14 +16,30 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Users;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Leaves;
 
-use Rhubarb\Patterns\Mvp\Crud\ModelForm\ModelFormPresenter;
+use Rhubarb\Leaf\Leaves\Leaf;
+use Rhubarb\Leaf\Leaves\LeafModel;
 
-class UsersItemPresenter extends ModelFormPresenter
+class Index extends Leaf
 {
-    protected function createView()
+    /**
+     * Returns the name of the standard view used for this leaf.
+     *
+     * @return string
+     */
+    protected function getViewClass()
     {
-        return new UsersItemView();
+        return IndexView::class;
+    }
+
+    /**
+     * Should return a class that derives from LeafModel
+     *
+     * @return LeafModel
+     */
+    protected function createModel()
+    {
+        return new LeafModel();
     }
 }

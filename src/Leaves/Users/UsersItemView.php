@@ -16,28 +16,34 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Accounts;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Users;
 
 use Rhubarb\Patterns\Mvp\Crud\CrudView;
 
-class AccountsItemView extends CrudView
+class UsersItemView extends CrudView
 {
-    public function createPresenters()
+    protected function createSubLeaves()
     {
         parent::createPresenters();
 
-        $this->addPresenters(
-            "AccountName"
+        $this->registerSubLeaf(
+            "Forename",
+            "Surname",
+            "Email",
+            "Enabled"
         );
     }
 
-
     protected function printViewContent()
     {
-        $this->printFieldset("",
+        $this->layoutItemsWithContainer("Profile Details",
             [
-                "AccountName",
-                "" => "{Save} {Cancel}"
+                "Name" => "{Forename} {Surname}",
+                "Email",
+                "" => "{Enabled} Login Enabled"
             ]);
+
+        print $this->presenters["Save"];
+        print $this->presenters["Cancel"];
     }
 }

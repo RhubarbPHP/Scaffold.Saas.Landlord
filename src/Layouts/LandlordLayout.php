@@ -19,13 +19,13 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\Layouts;
 
 use Rhubarb\Scaffolds\Authentication\Layouts\ApplicationLayout;
-use Rhubarb\Scaffolds\NavigationMenu\Presenters\TwoLevelMenuPresenter;
+use Rhubarb\Scaffolds\NavigationMenu\Presenters\TwoLevelMenu;
 
 class LandlordLayout extends ApplicationLayout
 {
     protected function printMenu()
     {
-        $menu = new TwoLevelMenuPresenter();
+        $menu = new TwoLevelMenu();
 
         print $menu;
     }

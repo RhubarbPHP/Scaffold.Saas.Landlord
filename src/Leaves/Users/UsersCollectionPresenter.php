@@ -16,16 +16,14 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Users;
 
-use Rhubarb\Leaf\Views\HtmlView;
+use Rhubarb\Patterns\Mvp\Crud\ModelForm\ModelBoundLeaf;
 
-class IndexView extends HtmlView
+class UsersCollectionPresenter extends ModelBoundLeaf
 {
-    protected function printViewContent()
+    protected function createView()
     {
-		?>
-	    <p>Welcome to the landlord dashboard</p>
-		<?php
+        return new UsersCollectionView();
     }
 }

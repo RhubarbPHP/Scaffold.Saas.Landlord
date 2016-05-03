@@ -22,7 +22,7 @@ use Rhubarb\Crown\Encryption\EncryptionProvider;
 use Rhubarb\Crown\Layout\LayoutModule;
 use Rhubarb\Crown\Module;
 use Rhubarb\Crown\UrlHandlers\ClassMappedUrlHandler;
-use Rhubarb\Patterns\Mvp\Crud\CrudUrlHandler;
+use Rhubarb\Leaf\Crud\UrlHandlers\CrudUrlHandler;
 use Rhubarb\RestApi\Resources\ApiDescriptionResource;
 use Rhubarb\RestApi\Resources\ModelRestResource;
 use Rhubarb\RestApi\UrlHandlers\RestApiRootHandler;
@@ -113,9 +113,9 @@ class SaasLandlordModule extends Module
 
         $this->addUrlHandlers(
             [
-                "/accounts/" => new CrudUrlHandler("Account", 'Rhubarb\Scaffolds\Saas\Landlord\Presenters\Accounts'),
-                "/users/" => new CrudUrlHandler("User", 'Rhubarb\Scaffolds\Saas\Landlord\Presenters\Users'),
-                "/" => new ClassMappedUrlHandler('\Rhubarb\Scaffolds\Saas\Landlord\Presenters\IndexPresenter'),
+                "/accounts/" => new CrudUrlHandler("Account", 'Rhubarb\Scaffolds\Saas\Landlord\Leaves\Accounts'),
+                "/users/" => new CrudUrlHandler("User", 'Rhubarb\Scaffolds\Saas\Landlord\Leaves\Users'),
+                "/" => new ClassMappedUrlHandler('\Rhubarb\Scaffolds\Saas\Landlord\Leaves\Index'),
             ]);
     }
 

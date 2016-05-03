@@ -18,32 +18,12 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Users;
 
-use Rhubarb\Patterns\Mvp\Crud\CrudView;
+use Rhubarb\Patterns\Mvp\Crud\ModelForm\ModelBoundLeaf;
 
-class UsersItemView extends CrudView
+class UsersItemPresenter extends ModelBoundLeaf
 {
-    public function createPresenters()
+    protected function createView()
     {
-        parent::createPresenters();
-
-        $this->addPresenters(
-            "Forename",
-            "Surname",
-            "Email",
-            "Enabled"
-        );
-    }
-
-    protected function printViewContent()
-    {
-        $this->printFieldset("Profile Details",
-            [
-                "Name" => "{Forename} {Surname}",
-                "Email",
-                "" => "{Enabled} Login Enabled"
-            ]);
-
-        print $this->presenters["Save"];
-        print $this->presenters["Cancel"];
+        return new UsersItemView();
     }
 }

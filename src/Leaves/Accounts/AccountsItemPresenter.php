@@ -16,14 +16,14 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Users;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Accounts;
 
-use Rhubarb\Patterns\Mvp\Crud\ModelForm\ModelFormPresenter;
+use Rhubarb\Patterns\Mvp\Crud\ModelForm\ModelBoundLeaf;
 
-class UsersCollectionPresenter extends ModelFormPresenter
+class AccountsItemPresenter extends ModelBoundLeaf
 {
     protected function createView()
     {
-        return new UsersCollectionView();
+        return new AccountsItemView();
     }
 }

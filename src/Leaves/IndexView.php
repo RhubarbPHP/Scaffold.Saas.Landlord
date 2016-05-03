@@ -16,14 +16,16 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Leaves;
 
-use Rhubarb\Leaf\Presenters\Forms\Form;
+use Rhubarb\Leaf\Views\View;
 
-class IndexPresenter extends Form
+class IndexView extends View
 {
-    protected function createView()
+    protected function printViewContent()
     {
-        return new IndexView();
+		?>
+	    <p>Welcome to the landlord dashboard</p>
+		<?php
     }
 }

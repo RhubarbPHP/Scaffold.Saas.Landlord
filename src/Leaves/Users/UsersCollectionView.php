@@ -20,17 +20,17 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Users;
 
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\User;
 use Rhubarb\Leaf\Presenters\Application\Table\Table;
-use Rhubarb\Leaf\Views\HtmlView;
+use Rhubarb\Leaf\Views\View;
 
-class UsersCollectionView extends HtmlView
+class UsersCollectionView extends View
 {
     protected $table;
 
-    public function createPresenters()
+    protected function createSubLeaves()
     {
         parent::createPresenters();
 
-        $this->addPresenters(
+        $this->registerSubLeaf(
             $this->table = new Table(User::findTenantUsers())
         );
 
