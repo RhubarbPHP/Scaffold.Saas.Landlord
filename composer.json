@@ -15,6 +15,7 @@
     "rhubarbphp/scaffold-authentication-with-roles": "*",
     "rhubarbphp/module-stem": "*",
     "rhubarbphp/module-leaf": "*",
+    "rhubarbphp/module-leaf-table": "^1.0.0",
     "rhubarbphp/module-restapi": "*",
     "rhubarbphp/module-patterns": "*",
     "rhubarbphp/scaffold-token-based-restapi": "*",

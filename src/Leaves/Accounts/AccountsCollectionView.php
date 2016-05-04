@@ -19,7 +19,7 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Accounts;
 
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\Account;
-use Rhubarb\Leaf\Presenters\Application\Table\Table;
+use Rhubarb\Leaf\Table\Leaves\Table;
 use Rhubarb\Leaf\Views\View;
 
 class AccountsCollectionView extends View

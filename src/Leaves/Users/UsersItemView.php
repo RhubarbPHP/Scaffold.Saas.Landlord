@@ -16,15 +16,15 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Users;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Leaves\Users;
 
-use Rhubarb\Patterns\Mvp\Crud\CrudView;
+use Rhubarb\Leaf\Crud\Leaves\CrudView;
 
 class UsersItemView extends CrudView
 {
     protected function createSubLeaves()
     {
-        parent::createPresenters();
+        parent::createSubLeaves();
 
         $this->registerSubLeaf(
             "Forename",
@@ -43,7 +43,7 @@ class UsersItemView extends CrudView
                 "" => "{Enabled} Login Enabled"
             ]);
 
-        print $this->presenters["Save"];
-        print $this->presenters["Cancel"];
+        print $this->leaves["Save"];
+        print $this->leaves["Cancel"];
     }
 }

@@ -19,7 +19,7 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\Layouts;
 
 use Rhubarb\Scaffolds\Authentication\Layouts\ApplicationLayout;
-use Rhubarb\Scaffolds\NavigationMenu\Presenters\TwoLevelMenu;
+use Rhubarb\Scaffolds\NavigationMenu\Leaves\TwoLevelMenu;
 
 class LandlordLayout extends ApplicationLayout
 {

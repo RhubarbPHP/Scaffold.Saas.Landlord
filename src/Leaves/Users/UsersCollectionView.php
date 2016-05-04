@@ -16,10 +16,10 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Users;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Leaves\Users;
 
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\User;
-use Rhubarb\Leaf\Presenters\Application\Table\Table;
+use Rhubarb\Leaf\Table\Leaves\Table;
 use Rhubarb\Leaf\Views\View;
 
 class UsersCollectionView extends View
@@ -28,13 +28,13 @@ class UsersCollectionView extends View
 
     protected function createSubLeaves()
     {
-        parent::createPresenters();
+        parent::createSubLeaves();
 
         $this->registerSubLeaf(
             $this->table = new Table(User::findTenantUsers())
         );
 
-        $this->table->Columns =
+        $this->table->columns =
             [
                 "Forename",
                 "Surname",

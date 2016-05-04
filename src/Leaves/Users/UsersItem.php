@@ -16,14 +16,22 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Users;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Leaves\Users;
 
-use Rhubarb\Patterns\Mvp\Crud\ModelForm\ModelBoundLeaf;
+use Rhubarb\Leaf\Crud\Leaves\CrudLeaf;
+use Rhubarb\Leaf\Crud\Leaves\CrudModel;
+use Rhubarb\Leaf\Leaves\LeafModel;
 
-class UsersItemPresenter extends ModelBoundLeaf
+class UsersItem extends CrudLeaf
 {
-    protected function createView()
+
+    /**
+     * Returns the name of the standard view used for this leaf.
+     *
+     * @return string
+     */
+    protected function getViewClass()
     {
-        return new UsersItemView();
+        return UsersItemView::class;
     }
 }
