@@ -34,7 +34,7 @@ class AccountsCollectionView extends View
             $this->table = new Table(Account::find())
         );
 
-        $this->table->Columns =
+        $this->table->columns =
             [
                 "AccountName",
                 "" => "<a href=\"{AccountID}/\">View</a>"
