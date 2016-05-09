@@ -2,20 +2,21 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\Emails;
 
-use Rhubarb\Crown\Email\TemplateEmail;
+use Rhubarb\Crown\DependencyInjection\Container;
+use Rhubarb\Crown\Sendables\Email\Email;
+use Rhubarb\Crown\Settings\WebsiteSettings;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\Invite;
 use Rhubarb\Scaffolds\Saas\Landlord\Settings\LandlordSettings;
 
-class InviteEmail extends TemplateEmail
+class InviteEmail extends Email
 {
     protected $invite;
 
-    public function __construct( Invite $invite )
+    public function __construct(Invite $invite)
     {
         $this->invite = $invite;
-        $this->addRecipient($invite->Email);
 
-        parent::__construct();
+        $this->addRecipientByEmail($invite->Email);
     }
 
     /**
@@ -28,26 +29,43 @@ class InviteEmail extends TemplateEmail
         return $this->invite;
     }
 
-    protected function getTextTemplateBody()
+    public function getText()
     {
         return "You've been invited to join us!";
     }
 
-    protected function getHtmlTemplateBody()
+    public function getHtml()
     {
-        $landlordSettings = new LandlordSettings();
+        $landlordSettings = LandlordSettings::singleton();
 
         $rd = base64_encode("/app/accounts/?i={$this->invite->InviteID}");
 
         return <<<END
 <p>You've been invited to join us!</p>
-<p><a href="{$landlordSettings->PublicWebsiteUrl}login/?rd={$rd}&amp;i={$this->invite->InviteID}">Accept the invitation</a></p>
+<p><a href="{$landlordSettings->publicWebsiteUrl}login/?rd={$rd}&amp;i={$this->invite->InviteID}">Accept the invitation</a></p>
 END;
 
     }
 
-    protected function getSubjectTemplate()
+    public function getSubject()
     {
-        return 'welcome, jerk';
+        return 'Welcome';
+    }
+
+    /**
+     * Expresses the sendable as an array allowing it to be serialised, stored and recovered later.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return ["InviteID" => $this->invite->InviteID];
+    }
+
+    public static function fromArray($array)
+    {
+        $invite = new Invite($array["InviteID"]);
+
+        return Container::instance(InviteEmail::class,$invite);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\Model\Users;
 
+use Rhubarb\Crown\DependencyInjection\Container;
+use Rhubarb\Crown\Sendables\Email\EmailProvider;
 use Rhubarb\Scaffolds\Saas\Landlord\Emails\InviteEmail;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\Account;
 use Rhubarb\Stem\Exceptions\ModelConsistencyValidationException;
@@ -85,8 +87,8 @@ class Invite extends Model
     public function send($resend = false)
     {
         if (!$this->Sent || $resend) {
-            $inviteEmail = new InviteEmail($this);
-            $inviteEmail->send();
+            $inviteEmail = Container::instance(InviteEmail::class,$this);
+            EmailProvider::selectProviderAndSend($inviteEmail);
             $this->SentDate = new \DateTime();
             $this->Sent = true;
             $this->save();
