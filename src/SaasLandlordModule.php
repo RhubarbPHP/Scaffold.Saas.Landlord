@@ -30,6 +30,7 @@ use Rhubarb\RestApi\UrlHandlers\RestCollectionHandler;
 use Rhubarb\RestApi\UrlHandlers\RestResourceHandler;
 use Rhubarb\RestApi\UrlHandlers\UnauthenticatedRestCollectionHandler;
 use Rhubarb\RestApi\UrlHandlers\UnauthenticatedRestResourceHandler;
+use Rhubarb\Scaffolds\Authentication\Settings\AuthenticationSettings;
 use Rhubarb\Scaffolds\AuthenticationWithRoles\AuthenticationWithRolesModule;
 use Rhubarb\Scaffolds\NavigationMenu\NavigationMenuModule;
 use Rhubarb\Scaffolds\Saas\Landlord\Layouts\LandlordLayout;
@@ -47,19 +48,15 @@ use Rhubarb\Stem\Schema\SolutionSchema;
 class SaasLandlordModule extends Module
 {
     private $apiStubUrl;
-    private static $identityColumnName = "";
 
     public function __construct($apiStubUrl = "/api", $identityColumnName = "Username")
     {
         $this->apiStubUrl = $apiStubUrl;
-        self::$identityColumnName = $identityColumnName;
+
+        $settings = AuthenticationSettings::singleton();
+        $settings->identityColumnName = $identityColumnName;
 
         parent::__construct();
-    }
-
-    public static function getIdentityColumnName()
-    {
-        return self::$identityColumnName;
     }
 
     protected function initialise()

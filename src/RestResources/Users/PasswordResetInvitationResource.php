@@ -18,9 +18,17 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users;
 
+use Rhubarb\Crown\DependencyInjection\Container;
+use Rhubarb\Crown\Sendables\Email\Email;
+use Rhubarb\Crown\Sendables\Email\EmailProvider;
+use Rhubarb\Crown\Sendables\Sendable;
 use Rhubarb\RestApi\Resources\RestResource;
 use Rhubarb\RestApi\UrlHandlers\RestHandler;
+use Rhubarb\Scaffolds\Authentication\Emails\ResetPasswordInvitationEmail;
+use Rhubarb\Scaffolds\Authentication\Settings\AuthenticationSettings;
 use Rhubarb\Scaffolds\AuthenticationWithRoles\User;
+use Rhubarb\Stem\Exceptions\RecordNotFoundException;
+use Rhubarb\Stem\Filters\Equals;
 
 /**
  * Handles password reset invitations and resources
@@ -34,23 +42,40 @@ class PasswordResetInvitationResource extends RestResource
         $hash = $restResource["PasswordResetHash"];
         $newPassword = $restResource["NewPassword"];
 
-        $user = User::fromPasswordResetHash($hash);
-        $user->setNewPassword($newPassword);
-        $user->save();
+        try {
+            $user = User::fromPasswordResetHash($hash);
+            $user->setNewPassword($newPassword);
+            $user->save();
+        }
+        catch (RecordNotFoundException $er){
+            return $this->buildErrorResponse("The password hash was invalid.");
+        }
+
+        return true;
     }
 
     public function post($restResource, RestHandler $handler = null)
     {
         $username = $restResource["Username"];
 
-        $user = User::fromUsername($username);
-        $hash = $user->generatePasswordResetHash();
+        $settings = AuthenticationSettings::singleton();
 
-        $response = new \stdClass();
-        $response->PasswordResetHash = $hash;
-        $response->Email = $user->Email;
-        $response->FullName = $user->FullName;
+        try {
+            $user = User::findFirst(new Equals($settings->identityColumnName, $username));
+            $hash = $user->generatePasswordResetHash();
 
-        return $response;
+            $response = new \stdClass();
+            $response->PasswordResetHash = $hash;
+            $response->Email = $user->Email;
+            $response->FullName = $user->FullName;
+
+            $email = Container::instance(ResetPasswordInvitationEmail::class, $user);
+            EmailProvider::selectProviderAndSend($email);
+
+            return $response;
+        }
+        catch (RecordNotFoundException $er ){
+            return $this->buildErrorResponse("An account identified by ".$username." couldn't be found.");
+        }
     }
 } 
