@@ -47,12 +47,19 @@ use Rhubarb\Stem\Schema\SolutionSchema;
 class SaasLandlordModule extends Module
 {
     private $apiStubUrl;
+    private static $identityColumnName = "";
 
-    public function __construct($apiStubUrl = "/api")
+    public function __construct($apiStubUrl = "/api", $identityColumnName = "Username")
     {
         $this->apiStubUrl = $apiStubUrl;
+        self::$identityColumnName = $identityColumnName;
 
         parent::__construct();
+    }
+
+    public static function getIdentityColumnName()
+    {
+        return self::$identityColumnName;
     }
 
     protected function initialise()

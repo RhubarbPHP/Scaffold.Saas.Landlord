@@ -20,6 +20,7 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\LoginProviders;
 
 use Rhubarb\Crown\LoginProviders\Exceptions\LoginFailedException;
 use Rhubarb\Scaffolds\Authentication\LoginProviders\LoginProvider;
+use Rhubarb\Scaffolds\Saas\Landlord\SaasLandlordModule;
 
 /**
  * The login provider to control authentication of users to the landlord admin system itself.
@@ -27,6 +28,11 @@ use Rhubarb\Scaffolds\Authentication\LoginProviders\LoginProvider;
  */
 class LandlordLoginProvider extends LoginProvider
 {
+    public function __construct()
+    {
+        parent::__construct("User", SaasLandlordModule::getIdentityColumnName(), "Password", "Enabled");
+    }
+
     protected function checkUserIsPermitted($user)
     {
         parent::checkUserIsPermitted($user);

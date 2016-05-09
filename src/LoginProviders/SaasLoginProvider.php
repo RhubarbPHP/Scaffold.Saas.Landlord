@@ -21,12 +21,18 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\LoginProviders;
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\Crown\LoginProviders\Exceptions\LoginFailedException;
 use Rhubarb\Scaffolds\Authentication\LoginProviders\LoginProvider;
+use Rhubarb\Scaffolds\Saas\Landlord\SaasLandlordModule;
 
 /**
  * The login provider used to serve tenant authentication requests.
  */
 class SaasLoginProvider extends LoginProvider
 {
+    public function __construct()
+    {
+        parent::__construct("User", SaasLandlordModule::getIdentityColumnName(), "Password", "Enabled");
+    }
+
     public function login($username, $password)
     {
         try {
