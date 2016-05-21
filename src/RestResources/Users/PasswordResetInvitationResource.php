@@ -19,6 +19,7 @@
 namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users;
 
 use Rhubarb\Crown\DependencyInjection\Container;
+use Rhubarb\Crown\Exceptions\EmailException;
 use Rhubarb\Crown\Sendables\Email\Email;
 use Rhubarb\Crown\Sendables\Email\EmailProvider;
 use Rhubarb\Crown\Sendables\Sendable;
@@ -70,7 +71,11 @@ class PasswordResetInvitationResource extends RestResource
             $response->FullName = $user->FullName;
 
             $email = Container::instance(ResetPasswordInvitationEmail::class, $user);
-            EmailProvider::selectProviderAndSend($email);
+
+            try {
+                EmailProvider::selectProviderAndSend($email);
+            } catch (EmailException $er){
+            }
 
             return $response;
         }
