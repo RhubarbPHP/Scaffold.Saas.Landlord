@@ -16,14 +16,14 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Accounts;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Leaves\Accounts;
 
-use Rhubarb\Leaf\Presenters\Forms\MvpRestBoundForm;
+use Rhubarb\Leaf\Crud\Leaves\CrudLeaf;
 
-class AccountsCollectionPresenter extends MvpRestBoundForm
+class AccountsCollection extends CrudLeaf
 {
-    protected function createView()
+    protected function getViewClass()
     {
-        return new AccountsCollectionView();
+        return AccountsCollectionView::class;
     }
 }

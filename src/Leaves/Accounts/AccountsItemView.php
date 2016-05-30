@@ -16,15 +16,15 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Accounts;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Leaves\Accounts;
 
-use Rhubarb\Patterns\Mvp\Crud\CrudView;
+use Rhubarb\Leaf\Crud\Leaves\CrudView;
 
 class AccountsItemView extends CrudView
 {
     protected function createSubLeaves()
     {
-        parent::createPresenters();
+        parent::createSubLeaves();
 
         $this->registerSubLeaf(
             "AccountName"

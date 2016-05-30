@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Presenters\Accounts;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Leaves\Accounts;
 
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\Account;
 use Rhubarb\Leaf\Table\Leaves\Table;
@@ -28,7 +28,7 @@ class AccountsCollectionView extends View
 
     protected function createSubLeaves()
     {
-        parent::createPresenters();
+        parent::createSubLeaves();
 
         $this->registerSubLeaf(
             $this->table = new Table(Account::find())
