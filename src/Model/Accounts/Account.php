@@ -96,8 +96,13 @@ class Account extends Model
 
     protected function getNextServer()
     {
-        $servers = Server::find()->addAggregateColumn(new Count("Accounts.AccountID"));
-        $servers->addSort("CountOfAccountsAccountID", true);
+        $servers = Server::find()->
+            joinWith(Account::all()
+                ->addAggregateColumn(new Count("AccountID")),
+                "ServerID",
+                "ServerID",
+                ["CountOfAccountID"])
+            ->addSort("CountOfAccountID", true);
 
         return $servers[0]->UniqueIdentifier;
     }
