@@ -6,7 +6,9 @@ use Rhubarb\Crown\DateTime\RhubarbDateTime;
 use Rhubarb\RestApi\Exceptions\RestImplementationException;
 use Rhubarb\RestApi\Resources\ModelRestResource;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\Account;
+use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\AccountUser;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\Invite;
+use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\User;
 use Rhubarb\Stem\Collections\Collection;
 use Rhubarb\Stem\Exceptions\RecordNotFoundException;
 use Rhubarb\Stem\Filters\Equals;
@@ -40,9 +42,12 @@ class InviteResource extends ModelRestResource
         }
 
         // See if the account already has a user with this email address.
-        $account = new Account($restResource["AccountID"]);
-        $users = $account->Users;
-        $users->filter(new Equals("Email", $restResource["Email"]));
+        $users = User::find(new Equals("Email", $restResource["Email"]));
+        $users->intersectWith(
+            AccountUser::find(new Equals("AccountID", $restResource["AccountID"])),
+            "UserID",
+            "UserID"
+        );
 
         if (count($users)){
             throw new RestImplementationException("There is already a user with this email address connected to the account.");
