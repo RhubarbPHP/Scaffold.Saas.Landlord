@@ -118,15 +118,30 @@ class Account extends Model
         // accepted and the tenant doesn't handle it well.
         $users = $this->Users;
 
-        if (!$users->containsUniqueIdentifier($user->UniqueIdentifier)) {
+        if (!$this->collectionContainsUser($users, $user)) {
             $this->Users->append($user);
         }
-
-        //$response = TenantGateway::createUser($this, $user, $additionalTenantUserProperties);
     }
 
     public function detachUser(User $user)
     {
         //TenantGateway::deleteUser($this, $user);
+    }
+
+    /**
+     * A function to check whether a User object is a part of a Collection of User objects.
+     *
+     * @param $arrayToSearch Collection of objects
+     * @param $itemToFind User object to find
+     * @return bool
+     */
+    private function collectionContainsUser(Collection $arrayToSearch, User $itemToFind) {
+
+        foreach ( $arrayToSearch as $item ) {
+            if ( $item->getUniqueIdentifier() === $itemToFind->getUniqueIdentifier() ) {
+                return true;
+            }
+        }
+        return false;
     }
 }
