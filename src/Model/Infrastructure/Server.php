@@ -37,7 +37,7 @@ class Server extends Model
         $schema->addColumn(
             new AutoIncrementColumn("ServerID"),
             new StringColumn("ServerName", 50),
-            new EncryptedStringColumn("Host", 80),
+            new EncryptedStringColumn("Host", 250),
             new EncryptedStringColumn("Port", 25)
         );
 
