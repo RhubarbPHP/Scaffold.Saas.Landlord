@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-namespace Rhubarb\Scaffolds\Saas\Landlord\Leaves\Accounts;
+namespace Rhubarb\Scaffolds\Saas\Landlord\Leaves\Servers;
 
 use Rhubarb\Leaf\Crud\Leaves\CrudLeaf;
 
