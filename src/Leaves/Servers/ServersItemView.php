@@ -18,12 +18,30 @@
 
 namespace Rhubarb\Scaffolds\Saas\Landlord\Leaves\Accounts;
 
-use Rhubarb\Leaf\Crud\Leaves\CrudLeaf;
+use Rhubarb\Leaf\Crud\Leaves\CrudView;
 
-class AccountsItem extends CrudLeaf
+class ServersItemView extends CrudView
 {
-    protected function getViewClass()
+    protected function createSubLeaves()
     {
-        return ServersItemView::class;
+        parent::createSubLeaves();
+
+        $this->registerSubLeaf(
+            "ServerName",
+            "Host",
+            "Port"
+        );
+    }
+
+
+    protected function printViewContent()
+    {
+        $this->layoutItemsWithContainer("",
+            [
+                "ServerName",
+                "Host",
+                "Port",
+                "" => "{Save} {Cancel}"
+            ]);
     }
 }

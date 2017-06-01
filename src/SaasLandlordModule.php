@@ -119,6 +119,7 @@ class SaasLandlordModule extends Module
             [
                 "/accounts/" => new CrudUrlHandler("Account", 'Rhubarb\Scaffolds\Saas\Landlord\Leaves\Accounts'),
                 "/users/" => new CrudUrlHandler("User", 'Rhubarb\Scaffolds\Saas\Landlord\Leaves\Users'),
+                "/servers/" => new CrudUrlHandler("Server", 'Rhubarb\Scaffolds\Saas\Landlord\Leaves\Servers'),
                 "/" => new ClassMappedUrlHandler('\Rhubarb\Scaffolds\Saas\Landlord\Leaves\Index'),
             ]);
     }

@@ -24,6 +24,6 @@ class AccountsCollection extends CrudLeaf
 {
     protected function getViewClass()
     {
-        return AccountsCollectionView::class;
+        return ServersCollectionView::class;
     }
 }

@@ -20,10 +20,10 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\Leaves\Accounts;
 
 use Rhubarb\Leaf\Crud\Leaves\CrudLeaf;
 
-class AccountsItem extends CrudLeaf
+class ServersCollection extends CrudLeaf
 {
     protected function getViewClass()
     {
-        return ServersItemView::class;
+        return ServersCollectionView::class;
     }
 }
