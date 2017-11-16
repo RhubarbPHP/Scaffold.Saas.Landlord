@@ -29,11 +29,9 @@ use Rhubarb\Scaffolds\Saas\Landlord\SaasLandlordModule;
  */
 class LandlordLoginProvider extends LoginProvider
 {
-    public function __construct()
+    public function __construct($identityColumnName = "Username")
     {
-        $settings = AuthenticationSettings::singleton();
-
-        parent::__construct("User", $settings->identityColumnName, "Password", "Enabled");
+        parent::__construct("User", $identityColumnName, "Password", "Enabled");
     }
 
     protected function checkUserIsPermitted($user)

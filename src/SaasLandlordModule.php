@@ -35,6 +35,7 @@ use Rhubarb\Scaffolds\AuthenticationWithRoles\AuthenticationWithRolesModule;
 use Rhubarb\Scaffolds\NavigationMenu\NavigationMenuModule;
 use Rhubarb\Scaffolds\Saas\Landlord\Layouts\LandlordLayout;
 use Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\LandlordLoginProvider;
+use Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider;
 use Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders\CredentialsAuthenticationProvider;
 use Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders\TokenBasedAuthenticationProvider;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountInviteResource;
@@ -48,13 +49,29 @@ use Rhubarb\Stem\Schema\SolutionSchema;
 class SaasLandlordModule extends Module
 {
     private $apiStubUrl;
+    /**
+     * @var string
+     */
+    private $credentialsAuthenticationProviderClassName;
+    /**
+     * @var string
+     */
+    private $landlordLoginProviderClassName;
 
-    public function __construct($apiStubUrl = "/api", $identityColumnName = "Username")
+    public function __construct($apiStubUrl = "/api", $credentialsAuthenticationProviderClassName = "", $landlordLoginProviderClassName = "")
     {
         $this->apiStubUrl = $apiStubUrl;
 
-        $settings = AuthenticationSettings::singleton();
-        $settings->identityColumnName = $identityColumnName;
+        if ($credentialsAuthenticationProviderClassName == ""){
+            $credentialsAuthenticationProviderClassName = CredentialsAuthenticationProvider::class;
+        }
+
+        if ($landlordLoginProviderClassName == ""){
+            $landlordLoginProviderClassName = LandlordLoginProvider::class;
+        }
+
+        $this->landlordLoginProviderClassName = $landlordLoginProviderClassName;
+        $this->credentialsAuthenticationProviderClassName = $credentialsAuthenticationProviderClassName;
 
         parent::__construct();
     }
@@ -73,9 +90,9 @@ class SaasLandlordModule extends Module
         return [
             new LayoutModule(LandlordLayout::class),
             new NavigationMenuModule(),
-            new AuthenticationWithRolesModule(LandlordLoginProvider::class),
+            new AuthenticationWithRolesModule($this->landlordLoginProviderClassName),
             new TokenBasedRestApiModule(
-            CredentialsAuthenticationProvider::class,
+            $this->credentialsAuthenticationProviderClassName,
             TokenBasedAuthenticationProvider::class
         )];
     }
