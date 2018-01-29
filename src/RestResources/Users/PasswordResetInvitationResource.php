@@ -26,10 +26,13 @@ use Rhubarb\Crown\Sendables\Sendable;
 use Rhubarb\RestApi\Resources\RestResource;
 use Rhubarb\RestApi\UrlHandlers\RestHandler;
 use Rhubarb\Scaffolds\Authentication\Emails\ResetPasswordInvitationEmail;
+use Rhubarb\Scaffolds\Authentication\LoginProviders\LoginProvider;
 use Rhubarb\Scaffolds\Authentication\Settings\AuthenticationSettings;
 use Rhubarb\Scaffolds\AuthenticationWithRoles\User;
+use Rhubarb\Scaffolds\Saas\Landlord\SaasLandlordModule;
 use Rhubarb\Stem\Exceptions\RecordNotFoundException;
 use Rhubarb\Stem\Filters\Equals;
+use Rhubarb\Stem\LoginProviders\ModelLoginProvider;
 
 /**
  * Handles password reset invitations and resources
@@ -59,10 +62,15 @@ class PasswordResetInvitationResource extends RestResource
     {
         $username = $restResource["Username"];
 
-        $settings = AuthenticationSettings::singleton();
+        $providerClass = SaasLandlordModule::getCredentialsLoginProviderClassName();
+
+        /**
+         * @var LoginProvider $provider
+         */
+        $provider = new $providerClass();
 
         try {
-            $user = User::findFirst(new Equals($settings->identityColumnName, $username));
+            $user = User::findFirst(new Equals($provider->getSettings()->identityColumnName, $username));
             $hash = $user->generatePasswordResetHash();
 
             $response = new \stdClass();

@@ -57,8 +57,12 @@ class SaasLandlordModule extends Module
      * @var string
      */
     private $landlordLoginProviderClassName;
+    /**
+     * @var string
+     */
+    private static $credentialsLoginProviderClassName;
 
-    public function __construct($apiStubUrl = "/api", $credentialsAuthenticationProviderClassName = "", $landlordLoginProviderClassName = "")
+    public function __construct($apiStubUrl = "/api", $credentialsAuthenticationProviderClassName = "", $credentialsLoginProviderClassName = "", $landlordLoginProviderClassName = "")
     {
         $this->apiStubUrl = $apiStubUrl;
 
@@ -72,8 +76,17 @@ class SaasLandlordModule extends Module
 
         $this->landlordLoginProviderClassName = $landlordLoginProviderClassName;
         $this->credentialsAuthenticationProviderClassName = $credentialsAuthenticationProviderClassName;
+        self::$credentialsLoginProviderClassName = $credentialsLoginProviderClassName;
 
         parent::__construct();
+    }
+
+    /**
+     * @return string
+     */
+    public static function getCredentialsLoginProviderClassName(): string
+    {
+        return self::$credentialsLoginProviderClassName;
     }
 
     protected function initialise()
@@ -92,7 +105,7 @@ class SaasLandlordModule extends Module
             new NavigationMenuModule(),
             new AuthenticationWithRolesModule($this->landlordLoginProviderClassName),
             new TokenBasedRestApiModule(
-            $this->credentialsAuthenticationProviderClassName,
+                $this->credentialsAuthenticationProviderClassName,
             TokenBasedAuthenticationProvider::class
         )];
     }
