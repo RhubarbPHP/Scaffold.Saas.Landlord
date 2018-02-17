@@ -66,6 +66,7 @@ class InviteResource extends ModelRestResource
         parent::filterModelCollectionAsContainer($collection);
 
         $collection->filter(new Equals("Accepted", false));
+        $collection->filter(new Equals("Revoked", false));
     }
 
     protected function getColumns()

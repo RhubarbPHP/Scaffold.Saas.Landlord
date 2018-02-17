@@ -39,6 +39,7 @@ use Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider;
 use Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders\CredentialsAuthenticationProvider;
 use Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders\TokenBasedAuthenticationProvider;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountInviteResource;
+use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountInviteRevokeResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\ServerResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users\UserInviteResource;
@@ -133,7 +134,10 @@ class SaasLandlordModule extends Module
                     [
                        "/users" => new RestCollectionHandler( UserResource::class, [], ["get", "post", "put" ] ),
                         // For invite management on the tenant system
-                        "/invites" => new RestCollectionHandler( AccountInviteResource::class, [], ["get", "post", "put" ] )
+                        "/invites" => new RestCollectionHandler( AccountInviteResource::class,
+                            [
+                                "/revoke" => new RestCollectionHandler ( AccountInviteRevokeResource::class, [], ["get", "post", "put" ] )
+                            ], ["get", "post", "put" ] )
                     ]),
             ] );
 

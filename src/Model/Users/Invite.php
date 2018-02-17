@@ -28,6 +28,7 @@ use Rhubarb\Stem\Schema\ModelSchema;
  * @property bool $Accepted
  * @property bool $Sent
  * @property \DateTime $SentDate
+ * @property bool $Revoked
  *
  * @property User $User
  * @property Account $Account
@@ -50,7 +51,8 @@ class Invite extends Model
             new StringColumn("AccountID", 50),
             new BooleanColumn("Accepted", false),
             new BooleanColumn("Sent", false),
-            new DateTimeColumn("SentDate")
+            new DateTimeColumn("SentDate"),
+            new BooleanColumn("Revoked", false)
         );
 
         $schema->uniqueIdentifierColumnName = 'InviteID';
