@@ -7,11 +7,10 @@ use Rhubarb\Scaffolds\Saas\Landlord\RestResources\InviteResource;
 class AccountInviteRevokeResource extends InviteResource
 {
 
-    public function post($restResource)
+    public function put($restResource)
     {
-        $restResource['AccountID'] = $this->parentResource->getModel()->UniqueIdentifier;
         $restResource['Revoked'] = true;
 
-        return parent::post($restResource);
+        return parent::put($restResource);
     }
 }
