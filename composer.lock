@@ -213,16 +213,16 @@
         },
         {
             "name": "rhubarbphp/module-leaf",
-            "version": "1.4.0",
+            "version": "1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RhubarbPHP/Module.Leaf.git",
-                "reference": "134fab85e6175d8bbf42ca6d0542b8fb223ffc82"
+                "reference": "3be76c6cd6951fc410a50b76c3391170a5f4158b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RhubarbPHP/Module.Leaf/zipball/134fab85e6175d8bbf42ca6d0542b8fb223ffc82",
-                "reference": "134fab85e6175d8bbf42ca6d0542b8fb223ffc82",
+                "url": "https://api.github.com/repos/RhubarbPHP/Module.Leaf/zipball/3be76c6cd6951fc410a50b76c3391170a5f4158b",
+                "reference": "3be76c6cd6951fc410a50b76c3391170a5f4158b",
                 "shasum": ""
             },
             "require": {
@@ -263,7 +263,7 @@
                 "presenter",
                 "rhubarb"
             ],
-            "time": "2018-01-30T08:55:21+00:00"
+            "time": "2018-02-20T11:41:32+00:00"
         },
         {
             "name": "rhubarbphp/module-leaf-common-controls",
