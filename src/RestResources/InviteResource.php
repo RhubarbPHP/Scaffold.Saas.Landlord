@@ -4,6 +4,8 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources;
 
 use Rhubarb\Crown\DateTime\RhubarbDateTime;
 use Rhubarb\RestApi\Exceptions\RestImplementationException;
+use Rhubarb\RestApi\Exceptions\RestResourceNotFoundException;
+use Rhubarb\RestApi\Resources\ItemRestResource;
 use Rhubarb\RestApi\Resources\ModelRestResource;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\Account;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\AccountUser;
@@ -23,6 +25,24 @@ class InviteResource extends ModelRestResource
     public function getModelName()
     {
         return "Invite";
+    }
+
+    /**
+     * Returns the ItemRestResource for the $resourceIdentifier contained in this collection.
+     *
+     * @param $resourceIdentifier
+     * @return ItemRestResource
+     * @throws RestImplementationException Thrown if the item could not be found.
+     */
+    public function createItemResource($resourceIdentifier)
+    {
+        try {
+            $model = Invite::findFirst(new Equals("InviteID", $resourceIdentifier));
+        } catch (RecordNotFoundException $er) {
+            throw new RestResourceNotFoundException(self::class, $resourceIdentifier);
+        }
+
+        return $this->getItemResourceForModel($model);
     }
 
     public function post($restResource)
@@ -77,6 +97,7 @@ class InviteResource extends ModelRestResource
         $columns[] = 'AccountID';
         $columns[] = 'Accepted';
         $columns[] = 'Email';
+        $columns[] = 'Revoked';
 
         return $columns;
     }

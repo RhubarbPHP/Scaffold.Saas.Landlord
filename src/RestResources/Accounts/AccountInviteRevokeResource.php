@@ -9,8 +9,6 @@ class AccountInviteRevokeResource extends InviteResource
 
     public function put($restResource)
     {
-        $restResource['Revoked'] = true;
-
-        return parent::put($restResource);
+        return $this->parentResource->put($restResource);
     }
 }
