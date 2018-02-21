@@ -42,6 +42,7 @@ use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountInviteResource
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountInviteRevokeResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\ServerResource;
+use Rhubarb\Scaffolds\Saas\Landlord\RestResources\InviteResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users\UserInviteResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users\UserResource;
 use Rhubarb\Scaffolds\TokenBasedRestApi\TokenBasedRestApiModule;
@@ -139,6 +140,7 @@ class SaasLandlordModule extends Module
                                 "/revoke" => new RestCollectionHandler ( AccountInviteRevokeResource::class, [], ["get", "post", "put" ] )
                             ], ["get", "post", "put" ] )
                     ]),
+                "/invite" => new UnauthenticatedRestResourceHandler(InviteResource::class, [] ['get'])
             ] );
 
         $rootApiUrl->setPriority(20);
