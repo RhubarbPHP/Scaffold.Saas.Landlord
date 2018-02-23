@@ -51,7 +51,7 @@ class InviteResource extends ModelRestResource
         try {
             $invite = Invite::fromEmailAndAccountID($restResource["Email"], $restResource["AccountID"]);
 
-            if (!$invite->Accepted){
+            if (!$invite->Accepted && !$invite->Revoked){
                 // The invitation is still valid - we can just return this one after asking it to resend
                 // the invitation email.
                 $this->setModel($invite);
@@ -62,7 +62,7 @@ class InviteResource extends ModelRestResource
         }
 
         // See if the account already has a user with this email address.
-        $users = User::find(new Equals("Email", $restResource["Email"]));
+        $users = User::find(new Equals("Email", $restResource["Email"]), new Equals("Enabled", true));
         $users->intersectWith(
             AccountUser::find(new Equals("AccountID", $restResource["AccountID"])),
             "UserID",
