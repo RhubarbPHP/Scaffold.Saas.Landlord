@@ -12,7 +12,7 @@ class InviteEmail extends Email
 {
     protected $invite;
 
-    public function __construct(Invite $invite)
+    public function __construct($invite)
     {
         $this->invite = $invite;
 
@@ -59,13 +59,12 @@ END;
      */
     public function toArray()
     {
-        return ["InviteID" => $this->invite->InviteID];
+        return ["Invite" => $this->invite];
     }
 
     public static function fromArray($array)
     {
-        $invite = new Invite($array["InviteID"]);
-
-        return Container::instance(InviteEmail::class,$invite);
+        $invite = $array["Invite"];
+        return Container::instance(InviteEmail::class,(object)$invite);
     }
 }

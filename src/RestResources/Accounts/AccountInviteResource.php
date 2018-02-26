@@ -7,6 +7,7 @@ use Rhubarb\RestApi\Exceptions\RestImplementationException;
 use Rhubarb\RestApi\Resources\ModelRestResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\InviteResource;
+use Rhubarb\Scaffolds\Saas\Tenant\Sessions\AccountSession;
 use Rhubarb\Stem\Collections\Collection;
 use Rhubarb\Stem\Exceptions\RecordNotFoundException;
 use Rhubarb\Stem\Filters\Equals;
