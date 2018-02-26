@@ -39,10 +39,13 @@ use Rhubarb\Scaffolds\Saas\Landlord\LoginProviders\SaasLoginProvider;
 use Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders\CredentialsAuthenticationProvider;
 use Rhubarb\Scaffolds\Saas\Landlord\RestAuthenticationProviders\TokenBasedAuthenticationProvider;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountInviteResource;
+use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountInviteRevokeResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\AccountResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Accounts\ServerResource;
+use Rhubarb\Scaffolds\Saas\Landlord\RestResources\InviteResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users\UserInviteResource;
 use Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users\UserResource;
+use Rhubarb\Scaffolds\Saas\Landlord\UrlHandlers\InviteUrlHandler;
 use Rhubarb\Scaffolds\TokenBasedRestApi\TokenBasedRestApiModule;
 use Rhubarb\Stem\Schema\SolutionSchema;
 
@@ -133,8 +136,12 @@ class SaasLandlordModule extends Module
                     [
                        "/users" => new RestCollectionHandler( UserResource::class, [], ["get", "post", "put" ] ),
                         // For invite management on the tenant system
-                        "/invites" => new RestCollectionHandler( AccountInviteResource::class, [], ["get", "post", "put" ] )
+                        "/invites" => new RestCollectionHandler( AccountInviteResource::class,
+                            [
+                                "/revoke" => new RestCollectionHandler ( AccountInviteRevokeResource::class, [], ["get", "post", "put" ] )
+                            ], ["get", "post", "put" ] )
                     ]),
+                "/invite" => new InviteUrlHandler(InviteResource::class, [] ['get'])
             ] );
 
         $rootApiUrl->setPriority(20);

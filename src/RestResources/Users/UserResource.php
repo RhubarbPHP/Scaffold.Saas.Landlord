@@ -20,6 +20,7 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources\Users;
 
 use Rhubarb\Crown\Logging\Log;
 use Rhubarb\RestApi\Exceptions\RestRequestPayloadValidationException;
+use Rhubarb\RestApi\Exceptions\RestResourceNotFoundException;
 use Rhubarb\RestApi\Resources\ModelRestResource;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\AccountUser;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\Invite;
@@ -52,6 +53,24 @@ class UserResource extends ModelRestResource
         }
 
         return $skeleton;
+    }
+
+    /**
+     * Returns the ItemRestResource for the $resourceIdentifier contained in this collection.
+     *
+     * @param $resourceIdentifier
+     * @return ItemRestResource
+     * @throws RestImplementationException Thrown if the item could not be found.
+     */
+    public function createItemResource($resourceIdentifier)
+    {
+        try {
+            $model = User::findFirst(new Equals("UUID", $resourceIdentifier));
+        } catch (RecordNotFoundException $er) {
+            throw new RestResourceNotFoundException(self::class, $resourceIdentifier);
+        }
+
+        return $this->getItemResourceForModel($model);
     }
 
 

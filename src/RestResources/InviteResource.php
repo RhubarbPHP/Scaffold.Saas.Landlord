@@ -4,6 +4,8 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\RestResources;
 
 use Rhubarb\Crown\DateTime\RhubarbDateTime;
 use Rhubarb\RestApi\Exceptions\RestImplementationException;
+use Rhubarb\RestApi\Exceptions\RestResourceNotFoundException;
+use Rhubarb\RestApi\Resources\ItemRestResource;
 use Rhubarb\RestApi\Resources\ModelRestResource;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\Account;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Accounts\AccountUser;
@@ -25,13 +27,31 @@ class InviteResource extends ModelRestResource
         return "Invite";
     }
 
+    /**
+     * Returns the ItemRestResource for the $resourceIdentifier contained in this collection.
+     *
+     * @param $resourceIdentifier
+     * @return ItemRestResource
+     * @throws RestImplementationException Thrown if the item could not be found.
+     */
+    public function createItemResource($resourceIdentifier)
+    {
+        try {
+            $model = Invite::findFirst(new Equals("InviteID", $resourceIdentifier));
+        } catch (RecordNotFoundException $er) {
+            throw new RestResourceNotFoundException(self::class, $resourceIdentifier);
+        }
+
+        return $this->getItemResourceForModel($model);
+    }
+
     public function post($restResource)
     {
         // We only should create an invite if there isn't one already pending for this account.
         try {
             $invite = Invite::fromEmailAndAccountID($restResource["Email"], $restResource["AccountID"]);
 
-            if (!$invite->Accepted){
+            if (!$invite->Accepted && !$invite->Revoked){
                 // The invitation is still valid - we can just return this one after asking it to resend
                 // the invitation email.
                 $this->setModel($invite);
@@ -42,7 +62,7 @@ class InviteResource extends ModelRestResource
         }
 
         // See if the account already has a user with this email address.
-        $users = User::find(new Equals("Email", $restResource["Email"]));
+        $users = User::find(new Equals("Email", $restResource["Email"]), new Equals("Enabled", true));
         $users->intersectWith(
             AccountUser::find(new Equals("AccountID", $restResource["AccountID"])),
             "UserID",
@@ -76,6 +96,7 @@ class InviteResource extends ModelRestResource
         $columns[] = 'AccountID';
         $columns[] = 'Accepted';
         $columns[] = 'Email';
+        $columns[] = 'Revoked';
 
         return $columns;
     }

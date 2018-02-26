@@ -70,7 +70,7 @@ class PasswordResetInvitationResource extends RestResource
         $provider = new $providerClass();
 
         try {
-            $user = User::findFirst(new Equals($provider->getSettings()->identityColumnName, $username));
+            $user = User::findFirst(new Equals($provider->getSettings()->identityColumnName, $username), new Equals("Enabled", true));
             $hash = $user->generatePasswordResetHash();
 
             $response = new \stdClass();
