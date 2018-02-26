@@ -23,6 +23,8 @@ class InviteUrlHandler extends UnauthenticatedRestResourceHandler
         $inviteId = $parts[count($parts)-2];
 
         $resource->setModel(new Invite($inviteId));
+
+        return $resource;
     }
 
 }
