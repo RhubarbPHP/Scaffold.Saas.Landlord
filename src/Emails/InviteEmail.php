@@ -59,12 +59,12 @@ END;
      */
     public function toArray()
     {
-        return ["Invite" => $this->invite];
+        return ["Invite" => json_encode($this->invite)];
     }
 
     public static function fromArray($array)
     {
-        $invite = $array["Invite"];
+        $invite = json_decode($array["Invite"], false);
         return Container::instance(InviteEmail::class,(object)$invite);
     }
 }
