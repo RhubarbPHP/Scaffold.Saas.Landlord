@@ -38,11 +38,11 @@ class InviteEmail extends Email
     {
         $landlordSettings = LandlordSettings::singleton();
 
-        $rd = base64_encode("/app/accounts/?i={$this->invite->InviteID}");
+        $rd = base64_encode("/app/accounts/?i={$this->invite->_id}");
 
         return <<<END
 <p>You've been invited to join us!</p>
-<p><a href="{$landlordSettings->publicWebsiteUrl}login/?rd={$rd}&amp;i={$this->invite->InviteID}">Accept the invitation</a></p>
+<p><a href="{$landlordSettings->publicWebsiteUrl}login/?rd={$rd}&amp;i={$this->invite->_id}">Accept the invitation</a></p>
 END;
 
     }
@@ -59,12 +59,12 @@ END;
      */
     public function toArray()
     {
-        return ["Invite" => $this->invite];
+        return ["Invite" => json_encode($this->invite)];
     }
 
     public static function fromArray($array)
     {
-        $invite = $array["Invite"];
+        $invite = json_decode($array["Invite"], false);
         return Container::instance(InviteEmail::class,(object)$invite);
     }
 }

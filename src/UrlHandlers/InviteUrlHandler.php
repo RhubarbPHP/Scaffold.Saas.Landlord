@@ -4,7 +4,6 @@ namespace Rhubarb\Scaffolds\Saas\Landlord\UrlHandlers;
 
 use Rhubarb\Crown\Request\Request;
 use Rhubarb\Crown\Request\WebRequest;
-use Rhubarb\Crown\Response\Response;
 use Rhubarb\RestApi\UrlHandlers\UnauthenticatedRestResourceHandler;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\Invite;
 
@@ -20,7 +19,7 @@ class InviteUrlHandler extends UnauthenticatedRestResourceHandler
         $request = Request::current();
 
         $parts = explode("/", $request->urlPath);
-        $inviteId = $parts[count($parts)-2];
+        $inviteId = $parts[count($parts) - 1];
 
         $resource->setModel(new Invite($inviteId));
 

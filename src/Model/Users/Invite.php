@@ -88,7 +88,6 @@ class Invite extends Model
 
     public function send($resend = false)
     {
-        /*
         if (!$this->Sent || $resend) {
             $inviteEmail = Container::instance(InviteEmail::class,$this);
             EmailProvider::selectProviderAndSend($inviteEmail);
@@ -96,7 +95,6 @@ class Invite extends Model
             $this->Sent = true;
             $this->save();
         }
-        */
     }
 
 }

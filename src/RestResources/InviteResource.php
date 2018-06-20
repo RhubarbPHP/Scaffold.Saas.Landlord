@@ -13,6 +13,7 @@ use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\Invite;
 use Rhubarb\Scaffolds\Saas\Landlord\Model\Users\User;
 use Rhubarb\Stem\Collections\Collection;
 use Rhubarb\Stem\Exceptions\RecordNotFoundException;
+use Rhubarb\Stem\Filters\AndGroup;
 use Rhubarb\Stem\Filters\Equals;
 
 class InviteResource extends ModelRestResource
@@ -85,7 +86,12 @@ class InviteResource extends ModelRestResource
     {
         parent::filterModelCollectionAsContainer($collection);
 
-        $collection->filter(new Equals("Accepted", false));
+        $collection->filter(
+            new AndGroup(
+                new Equals("Accepted", false),
+                new Equals("AccountID", $this->parentResource->getModel()->UniqueIdentifier)
+            )
+        );
     }
 
     protected function getColumns()
