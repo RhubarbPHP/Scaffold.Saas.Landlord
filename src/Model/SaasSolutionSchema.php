@@ -95,10 +95,6 @@ class SaasSolutionSchema extends SolutionSchema
             }
 
         });
-
-        ModelEventManager::attachEventHandler("Invite", "AfterSave", function (Invite $invite) {
-            $invite->send();
-        });
     }
 
     protected function defineRelationships()
