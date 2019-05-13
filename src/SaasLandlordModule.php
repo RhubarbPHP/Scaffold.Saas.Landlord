@@ -141,7 +141,7 @@ class SaasLandlordModule extends Module
                                 "/revoke" => new RestCollectionHandler ( AccountInviteRevokeResource::class, [], ["get", "post", "put" ] )
                             ], ["get", "post", "put" ] )
                     ]),
-                "/invite" => new InviteUrlHandler(InviteResource::class, [] ['get'])
+                "/invite" => new InviteUrlHandler(InviteResource::class, [], ['get'])
             ] );
 
         $rootApiUrl->setPriority(20);
