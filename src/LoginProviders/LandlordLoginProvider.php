@@ -34,7 +34,7 @@ class LandlordLoginProvider extends LoginProvider
         parent::__construct("User", $identityColumnName, "Password", "Enabled");
     }
 
-    protected function checkUserIsPermitted($user)
+    protected function checkUserIsPermitted($user = null)
     {
         parent::checkUserIsPermitted($user);
 
